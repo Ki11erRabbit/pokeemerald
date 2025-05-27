@@ -1,0 +1,9 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# JetBrains IDEs
+.idea/
+
+# Prevent Assets from being included for legal reasons
+assets/
