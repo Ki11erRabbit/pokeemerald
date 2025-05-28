@@ -11,8 +11,15 @@ config_version=5
 [application]
 
 config/name="PokeEmerald"
-config/features=PackedStringArray("4.4", "GL Compatibility")
+run/main_scene="uid://didjjlyomyes2"
+config/features=PackedStringArray("4.4", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=960
+window/size/viewport_height=640
+window/stretch/scale=8.0
 
 [dotnet]
 
