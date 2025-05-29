@@ -119,7 +119,7 @@ public partial class CharacterMovement : Node
     {
         if (IsMoving()) return;
         EmitSignal(SignalName.Animation, "walk");
-        TargetPosition = Character.Position + CharacterController.Direction * 16;
+        TargetPosition = Character.Position + CharacterController.Direction * Globals.Instance.TileSize;
         CurrentMovingState = MovingState.Walking;
     }
 
@@ -183,12 +183,14 @@ public partial class CharacterMovement : Node
     {
         if (IsWalking())
         {
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta * 4 * 16);// TODO: add tilesize constant and walk rate
+            delta *= Globals.Instance.TileSize * Globals.Instance.WalkingSpeed;
+            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
 
         }
         else if (IsRunning())
         {
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);// TODO: add tilesize constant and run rate
+            delta *= Globals.Instance.TileSize * Globals.Instance.RunningSpeed;
+            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
         }
         else if (IsCycling())
         {
@@ -218,9 +220,6 @@ public partial class CharacterMovement : Node
     }
     public void SnapPositionToGrid()
     {
-        Character.Position = new Vector2(
-            Mathf.Round(Character.Position.X / 16) * 16,
-            Mathf.Round(Character.Position.Y / 16) * 16
-        );
+        Globals.Instance.SnapToGrid(Character.Position);
     }
 }

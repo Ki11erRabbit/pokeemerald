@@ -289,10 +289,10 @@ CharacterController = NodePath("../CharacterController")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Animation" index="0"]
 texture_filter = 1
-position = Vector2(10, 5)
-scale = Vector2(0.625, 0.625)
+position = Vector2(8, 4)
+scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_db84v")
-animation = &"walk_down"
+animation = &"idle_down"
 
 [node name="Camera2D" type="Camera2D" parent="." index="3"]
 position = Vector2(10, 10)
