@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="PokeEmerald"
-run/main_scene="uid://didjjlyomyes2"
+run/main_scene="uid://dyty120jj2n30"
 config/features=PackedStringArray("4.4", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Globals="*res://scripts/Globals.cs"
+GameState="*res://scripts/game_state/GameState.cs"
 
 [display]
 

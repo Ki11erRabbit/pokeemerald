@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+namespace PokeEmerald;
 public partial class Globals : Node
 {
     [ExportCategory("Constants")] 
@@ -8,9 +9,9 @@ public partial class Globals : Node
     [Export] public double WalkingSpeed { get; set; } = 4.0;
     [Export] public double RunningSpeed { get; set; } = 8.0;
     [Export] public double AcroCyclingSpeed { get; set; } = 10.67;
+    [Export] public double AcroCyclingWheelieSpeed { get; set; } = 8.0;
     [Export] public double MachCyclingSpeed { get; set; } = 16;
     [Export] public double SwimmingSpeed { get; set; } = 8.0;
-    [Export] public double JumpingSpeed { get; set; } = 4.0;
     [Export] public double DivingSpeed { get; set; } = 5.0;
     
     public static Globals Instance { get; private set; }
@@ -26,5 +27,16 @@ public partial class Globals : Node
             Mathf.Round(pos.X / TileSize) * TileSize,
             Mathf.Round(pos.Y / TileSize) * TileSize
         );
+    }
+
+    public double GetBikeSpeed()
+    {
+        Debug.Assert(GameState.GameState.CanRideBike(), "Player shouldn't be able to ride bike");
+        return GameState.GameState.Instance.BikeState switch
+        {
+            GameState.BikeState.NoBike => 0.0,
+            GameState.BikeState.AcroBike => GameState.GameState.Instance.DoingWheelie ? AcroCyclingWheelieSpeed : AcroCyclingSpeed,
+            GameState.BikeState.MachBike => MachCyclingSpeed,
+        };
     }
 }

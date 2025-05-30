@@ -5,6 +5,8 @@ namespace PokeEmerald.Characters;
 public partial class CharacterController : Node
 {
 	[Signal]
+	public delegate void IdleEventHandler();
+	[Signal]
 	public delegate void WalkEventHandler();
 	[Signal]
 	public delegate void TurnEventHandler();
@@ -12,6 +14,8 @@ public partial class CharacterController : Node
 	public delegate void RunEventHandler();
 	[Signal]
 	public delegate void CycleEventHandler();
+	[Signal]
+	public delegate void CycleStopEventHandler();
 	[Signal]
 	public delegate void SwimmingEventHandler();
 	[Signal]

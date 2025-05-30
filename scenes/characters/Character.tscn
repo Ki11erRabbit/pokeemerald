@@ -6,19 +6,16 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fuqhm"]
 size = Vector2(16, 16)
 
-[node name="Character" type="CharacterBody2D" node_paths=PackedStringArray("CharacterController", "StateMachine")]
+[node name="Character" type="CharacterBody2D"]
 script = ExtResource("1_52avm")
-CharacterController = NodePath("")
-StateMachine = NodePath("")
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 position = Vector2(8, 8)
 shape = SubResource("RectangleShape2D_fuqhm")
 
-[node name="Movement" type="Node" parent="." node_paths=PackedStringArray("Character", "CharacterController")]
+[node name="Movement" type="Node" parent="." node_paths=PackedStringArray("Character")]
 script = ExtResource("2_typq7")
 Character = NodePath("..")
-CharacterController = NodePath("")
 
 [node name="CollisonRayCast" type="RayCast2D" parent="."]
 position = Vector2(8, 8)

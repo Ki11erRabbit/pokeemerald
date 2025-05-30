@@ -8,8 +8,13 @@ public partial class PlayerController : CharacterController
 	[ExportCategory("Player Input")] 
 	[Export]
 	public double HoldThreshold = 0.1f;
+	[Export]
+	public double BHoldThreshold = 0.5f;
+	[Export]
+	public double BounceHoldThreshold = 1.5f;
 
 	[Export] public double HoldTime = 0.0f;
+	[Export] public double BHoldTime = 0.0f;
 	private bool _sameDirection = false;
 
 	public void SetDirection()
@@ -57,6 +62,51 @@ public partial class PlayerController : CharacterController
 			HoldTime = 0.0f;
 		}
 
+		if (Input.IsActionJustPressed("ui_accept"))
+		{
+			if (GameState.GameState.Instance.RidingBike)
+			{
+				GameState.GameState.StopRidingBike();
+				EmitSignal(SignalName.CycleStop);
+			}
+			else
+			{
+				GameState.GameState.RideBike();
+				EmitSignal(SignalName.Cycle);
+			}
+		}
+
+		
+		
+		if (Input.IsActionPressed("ui_cancel") && GameState.GameState.Instance.RidingBike)
+		{
+			var oldBHold = BHoldTime;
+			BHoldTime += delta;
+			if (GameState.GameState.RidingAcroBike())
+			{
+				if (BHoldTime > BounceHoldThreshold)
+				{
+					GameState.GameState.DoWheelieBounce();
+				}
+				else if (BHoldTime > BHoldThreshold && HoldTime <= 0.0)
+				{
+					GameState.GameState.DoWheelie();
+					BHoldTime = oldBHold;
+				}
+				else
+				{
+					GameState.GameState.StopDoingWheelieBounce();
+					GameState.GameState.DoWheelie();
+				}
+			}
+		}
+		else if (Input.IsActionJustReleased("ui_cancel") && GameState.GameState.Instance.RidingBike)
+		{
+			BHoldTime = 0.0f;
+			GameState.GameState.StopDoingWheelie();
+			EmitSignal(SignalName.Cycle);
+		}
+
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
@@ -64,7 +114,14 @@ public partial class PlayerController : CharacterController
 
 			if (HoldTime > HoldThreshold)
 			{
-				EmitSignal(SignalName.Walk);
+				if (Input.IsActionPressed("ui_cancel"))
+				{
+					EmitSignal(SignalName.Run);
+				}
+				else
+				{
+					EmitSignal(SignalName.Walk);
+				}
 			}
 		}
 	}

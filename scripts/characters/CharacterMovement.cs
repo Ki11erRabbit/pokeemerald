@@ -31,14 +31,15 @@ public partial class CharacterMovement : Node
     [Export] public Vector2 TargetPosition = Vector2.Down;
     [Export] public MovingState CurrentMovingState = MovingState.Idle;
     [Export] public MovementState CurrentMovementState = MovementState.Grounded;
-    [Export] public bool IsMovingToTile = false;
 
     public override void _Ready()
     {
         Character = GetParent<Character>();
+        CharacterController.Idle += StartIdling;
         CharacterController.Walk += StartWalking;
         CharacterController.Run += StartRunning;
         CharacterController.Cycle += StartCycling;
+        CharacterController.CycleStop += StopCycling;
         CharacterController.Swimming += StartSwimming;
         CharacterController.Jumping += StartJumping;
         CharacterController.Diving += StartDiving;
@@ -66,7 +67,7 @@ public partial class CharacterMovement : Node
         {
             MovementState.Grounded => true,
             _ => false,
-        };
+        } && CurrentMovingState == MovingState.Walking;
         return walking;
     }
 
@@ -127,7 +128,6 @@ public partial class CharacterMovement : Node
     {
         EmitSignal(SignalName.Animation, "idle");
         CurrentMovingState = MovingState.Idle;
-        IsMovingToTile = false;
         SnapPositionToGrid();
     }
 
@@ -135,18 +135,24 @@ public partial class CharacterMovement : Node
     {
         if (IsMoving()) return;
         EmitSignal(SignalName.Animation, "run");
-        // TODO: fetch direction from character controller
+        TargetPosition = Character.Position + CharacterController.Direction * Globals.Instance.TileSize;
         CurrentMovingState = MovingState.Running;
-        IsMovingToTile = true;
     }
 
     public void StartCycling()
     {
         if (IsCycling()) return;
         EmitSignal(SignalName.Animation, "cycle");
-        // TODO: fetch direction from character controller
+        TargetPosition = Character.Position;
+        CurrentMovementState = MovementState.Cycling;
+        CurrentMovingState = MovingState.Walking;
+    }
+    public void StopCycling()
+    {
+        if (!IsCycling()) return;
+        EmitSignal(SignalName.Animation, "idle");
+        TargetPosition = Character.Position + CharacterController.Direction * Globals.Instance.TileSize;
         CurrentMovementState = MovementState.Grounded;
-        CurrentMovingState = MovingState.Running;
     }
 
     public void StartSwimming()
@@ -163,7 +169,6 @@ public partial class CharacterMovement : Node
         EmitSignal(SignalName.Animation, "jump");
         // TODO: fetch direction from character controller
         CurrentMovementState = MovementState.Jumping;
-        IsMovingToTile = true;
     }
 
     public void StartDiving()
@@ -194,13 +199,32 @@ public partial class CharacterMovement : Node
         }
         else if (IsCycling())
         {
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);// TODO: add tilesize constant and cycle rate
+            delta *= Globals.Instance.TileSize * Globals.Instance.GetBikeSpeed();
+            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
 
         }
         else if (IsJumping())
         {
-            
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);// TODO: add tilesize constant and walk rate
+            if (CurrentMovingState == MovingState.Running)
+            {
+                if (CurrentMovementState == MovementState.Cycling)
+                {
+                    delta *= Globals.Instance.TileSize * Globals.Instance.GetBikeSpeed();
+                }
+                else
+                {
+                    delta *= Globals.Instance.TileSize * Globals.Instance.RunningSpeed;
+                }
+            }
+            else if (CurrentMovingState == MovingState.Walking)
+            {
+                delta *= Globals.Instance.TileSize * Globals.Instance.WalkingSpeed;
+            }
+            else
+            {
+                Debug.Assert(true, "Invalid moving state");
+            }
+            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
             // TODO: Animate Sprite while jumping
         }
         else if (IsSwimming())

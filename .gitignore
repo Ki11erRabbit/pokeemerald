@@ -5,5 +5,3 @@
 # JetBrains IDEs
 .idea/
 
-# Prevent Assets from being included for legal reasons
-assets/
