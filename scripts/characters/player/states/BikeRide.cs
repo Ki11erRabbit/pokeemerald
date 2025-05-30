@@ -12,6 +12,11 @@ public partial class BikeRide : CharacterState
 		SetDirection();
 		ProcessPress(delta);
 	}
+    
+	public override void SetUp(CharacterState state)
+	{
+		TargetPosition = state.TargetPosition;
+	}
 	
 	public override void Move(double delta)
 	{
@@ -41,29 +46,7 @@ public partial class BikeRide : CharacterState
 		return false;
 	}
 
-	private void SetDirection()
-	{
-		if (Input.IsActionJustPressed("ui_up"))
-		{
-			Controller.Direction = Vector2.Up;
-			Controller.TargetPosition = new Vector2(0, -16);
-		}
-		else if (Input.IsActionJustPressed("ui_down"))
-		{
-			Controller.Direction = Vector2.Down;
-			Controller.TargetPosition = new Vector2(0, 16);
-		}
-		else if (Input.IsActionJustPressed("ui_left"))
-		{
-			Controller.Direction = Vector2.Left;
-			Controller.TargetPosition = new Vector2(-16, 0);
-		}
-		else if (Input.IsActionJustPressed("ui_right"))
-		{
-			Controller.Direction = Vector2.Right;
-			Controller.TargetPosition = new Vector2(16, 0);
-		}
-	}
+
 
 	private void ProcessPress(double delta)
 	{
@@ -89,7 +72,11 @@ public partial class BikeRide : CharacterState
 			
 			if (Input.IsActionPressed("ui_cancel"))
 			{
-				if (GameState.GameState.RidingAcroBike()) Machine.TransitionToState("BikeStartWheelie");
+				if (GameState.GameState.RidingAcroBike())
+				{
+					Machine.TransitionToState("BikeStartWheelieRide");
+					Machine.GetCurrentState<BikeStartWheelieRide>().SetUp(this);
+				}
 			}
 
 			if (_speedUpTime > SpeedUpThreshold && !GameState.GameState.RidingAcroBike())

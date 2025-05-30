@@ -3,19 +3,26 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class BikeStartWheelie : CharacterState
+public partial class BikeStopWheelieRide : CharacterState
 {
 	[Export] public AnimatedSprite2D AnimatedSprite;
-	private bool _isMoving = false;
-	
-	public override void Enter()
-	{
-		_isMoving = false;
-	}
+	private bool _shouldProcess = false;
     public override void _Process(double delta)
 	{
 		SetDirection();
 		ProcessPress(delta);
+		_shouldProcess = true;
+	}
+    
+	public override void Enter()
+	{
+		_shouldProcess = true;
+	}
+
+	public override void ExitState()
+	{
+		base.ExitState();
+		_shouldProcess = false;
 	}
 
 	public override void CustomReady()
@@ -31,11 +38,12 @@ public partial class BikeStartWheelie : CharacterState
 	
 	public override bool IsMoving()
 	{
-		return _isMoving;
+		return true;
 	}
 
 	public override void StartIdling()
 	{
+		
 	}
 
 	public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
@@ -46,32 +54,10 @@ public partial class BikeStartWheelie : CharacterState
 			StateMachine.AnimationState.bike_acro_wheelie_start_right, 
 			StateMachine.AnimationState.bike_acro_wheelie_start_down
 		]);
-		return false;
+		animatedSprite.PlayBackwards(AnimationState.ToString());
+		return true;
 	}
-
-	private void SetDirection()
-	{
-		if (Input.IsActionJustPressed("ui_up"))
-		{
-			Controller.Direction = Vector2.Up;
-			Controller.TargetPosition = new Vector2(0, -16);
-		}
-		else if (Input.IsActionJustPressed("ui_down"))
-		{
-			Controller.Direction = Vector2.Down;
-			Controller.TargetPosition = new Vector2(0, 16);
-		}
-		else if (Input.IsActionJustPressed("ui_left"))
-		{
-			Controller.Direction = Vector2.Left;
-			Controller.TargetPosition = new Vector2(-16, 0);
-		}
-		else if (Input.IsActionJustPressed("ui_right"))
-		{
-			Controller.Direction = Vector2.Right;
-			Controller.TargetPosition = new Vector2(16, 0);
-		}
-	}
+	
 
 	private void ProcessPress(double delta)
 	{
@@ -80,49 +66,33 @@ public partial class BikeStartWheelie : CharacterState
 		{
 			if (AtTargetPosition())
 			{
-				_isMoving = false;
+				Machine.TransitionToState("BikeIdle");
 			}
 		}
-
+		
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
+			_shouldProcess = false;
 			Machine.TransitionToState("Idle");
 		}
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-
-			_isMoving = true;
-			
 			if (AtTargetPosition())
 			{
+				SetTargetPosition();
 			}
 		}
 	}
 
 	public void AnimationFinished()
 	{
-		Debug.Log("\t\tAnimationFinished");
-		if (CanProcess())
+		if (CanProcess() && _shouldProcess)
 		{
-			if (!Input.IsActionPressed("ui_cancel"))
-			{
-				Debug.Log("\t\tStopping Wheelie");
-				Machine.TransitionToState("BikeStopWheelie");
-			}
-			else
-			{
-				Debug.Log("\t\tStarting Wheelie");
-				if (_isMoving)
-				{
-					Machine.TransitionToState("BikeWheelieRide");
-				}
-				else
-				{
-					Machine.TransitionToState("BikeWheelieIdle");
-				}
-			}
+			_shouldProcess = false;
+			Machine.TransitionToState("BikeRide");
+			Machine.GetCurrentState<BikeRide>().SetUp(this);
 		}
 	}
 }

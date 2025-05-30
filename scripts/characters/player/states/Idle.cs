@@ -52,35 +52,7 @@ public partial class Idle : CharacterState
 		]);
 		return false;
 	}
-
-	private void SetDirection()
-	{
-		if (Input.IsActionJustPressed("ui_up"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Up);
-			Controller.Direction = Vector2.Up;
-			Controller.TargetPosition = new Vector2(0, -16);
-		}
-		else if (Input.IsActionJustPressed("ui_down"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Down);
-			Controller.Direction = Vector2.Down;
-			Controller.TargetPosition = new Vector2(0, 16);
-			Debug.Log("Pressing down");
-		}
-		else if (Input.IsActionJustPressed("ui_left"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Left);
-			Controller.Direction = Vector2.Left;
-			Controller.TargetPosition = new Vector2(-16, 0);
-		}
-		else if (Input.IsActionJustPressed("ui_right"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Right);
-			Controller.Direction = Vector2.Right;
-			Controller.TargetPosition = new Vector2(16, 0);
-		}
-	}
+	
 
 	private void ProcessPress(double delta)
 	{

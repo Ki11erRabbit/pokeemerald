@@ -12,6 +12,11 @@ public partial class BikeWheelieRide : CharacterState
 	    _character.Position = _character.Position.MoveToward(TargetPosition, (float)delta);
     }
 
+    public override void SetUp(CharacterState state)
+    {
+	    TargetPosition = state.TargetPosition;
+    }
+    
     public override bool IsMoving()
     {
         return true;
@@ -33,34 +38,6 @@ public partial class BikeWheelieRide : CharacterState
         return false;
     }
     
-    private void SetDirection()
-	{
-		if (Input.IsActionJustPressed("ui_up"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Up);
-			Controller.Direction = Vector2.Up;
-			Controller.TargetPosition = new Vector2(0, -16);
-		}
-		else if (Input.IsActionJustPressed("ui_down"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Down);
-			Controller.Direction = Vector2.Down;
-			Controller.TargetPosition = new Vector2(0, 16);
-			Debug.Log("Pressing down");
-		}
-		else if (Input.IsActionJustPressed("ui_left"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Left);
-			Controller.Direction = Vector2.Left;
-			Controller.TargetPosition = new Vector2(-16, 0);
-		}
-		else if (Input.IsActionJustPressed("ui_right"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Right);
-			Controller.Direction = Vector2.Right;
-			Controller.TargetPosition = new Vector2(16, 0);
-		}
-	}
 
 	private void ProcessPress(double delta)
 	{
@@ -80,17 +57,16 @@ public partial class BikeWheelieRide : CharacterState
 		
 		if (!Input.IsActionPressed("ui_cancel"))
 		{
-			Machine.TransitionToState("BikeStopWheelie");
+			Machine.TransitionToState("BikeStopWheelieRide");
 			return;
 		}
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-
 			if (!Input.IsActionPressed("ui_cancel"))
 			{
-				Machine.TransitionToState("BikeStopWheelie");
+				Machine.TransitionToState("BikeStopWheelieRide");
 			}
 			else if (AtTargetPosition())
 			{

@@ -1,4 +1,4 @@
-[gd_scene load_steps=131 format=3 uid="uid://didjjlyomyes2"]
+[gd_scene load_steps=133 format=3 uid="uid://didjjlyomyes2"]
 
 [ext_resource type="PackedScene" uid="uid://bus3gc6sk80pf" path="res://scenes/characters/Character.tscn" id="1_db84v"]
 [ext_resource type="Texture2D" uid="uid://4holuep1sky7" path="res://assets/player/brendon.png" id="2_b7oxf"]
@@ -13,9 +13,11 @@
 [ext_resource type="Script" uid="uid://b12vw67o3wkhb" path="res://scripts/characters/player/states/BikeIdle.cs" id="9_7onrl"]
 [ext_resource type="Script" uid="uid://bwxmmafcqkmqn" path="res://scripts/characters/player/states/BikeRide.cs" id="10_o3xhh"]
 [ext_resource type="Script" uid="uid://pabqofmaqmf4" path="res://scripts/characters/player/states/BikeRideMach.cs" id="11_omv6f"]
-[ext_resource type="Script" uid="uid://balv5o77eb7a4" path="res://scripts/characters/player/states/BikeStartWheelie.cs" id="12_yr7ad"]
-[ext_resource type="Script" uid="uid://0eknbqge1dmw" path="res://scripts/characters/player/states/BikeStopWheelie.cs" id="13_7n5xd"]
+[ext_resource type="Script" uid="uid://b5had2w2rddoc" path="res://scripts/characters/player/states/BikeStartWheelieIdle.cs" id="12_omv6f"]
+[ext_resource type="Script" uid="uid://balv5o77eb7a4" path="res://scripts/characters/player/states/BikeStartWheelieRide.cs" id="13_yr7ad"]
 [ext_resource type="Script" uid="uid://dy1g1y7dsvjmg" path="res://scripts/characters/player/states/BikeWheelieIdle.cs" id="14_wi6i7"]
+[ext_resource type="Script" uid="uid://0eknbqge1dmw" path="res://scripts/characters/player/states/BikeStopWheelieIdle.cs" id="14_yr7ad"]
+[ext_resource type="Script" uid="uid://cu0gypssev1qw" path="res://scripts/characters/player/states/BikeStopWheelieRide.cs" id="15_7n5xd"]
 [ext_resource type="Script" uid="uid://c531722iat6lw" path="res://scripts/characters/player/states/BikeWheelieRide.cs" id="15_o3xhh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ouea"]
@@ -1110,30 +1112,46 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStartWheelie" type="Node" parent="StateMachine" index="7" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
-script = ExtResource("12_yr7ad")
+[node name="BikeStartWheelieIdle" type="Node" parent="StateMachine" index="7" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+script = ExtResource("12_omv6f")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStopWheelie" type="Node" parent="StateMachine" index="8" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
-script = ExtResource("13_7n5xd")
+[node name="BikeStartWheelieRide" type="Node" parent="StateMachine" index="8" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+script = ExtResource("13_yr7ad")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieIdle" type="Node" parent="StateMachine" index="9" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeStopWheelieIdle" type="Node" parent="StateMachine" index="9" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+script = ExtResource("14_yr7ad")
+AnimatedSprite = NodePath("../../Animation/Animation")
+Controller = NodePath("../../CharacterController")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="BikeStopWheelieRide" type="Node" parent="StateMachine" index="10" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+script = ExtResource("15_7n5xd")
+AnimatedSprite = NodePath("../../Animation/Animation")
+Controller = NodePath("../../CharacterController")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="BikeWheelieIdle" type="Node" parent="StateMachine" index="11" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
 script = ExtResource("14_wi6i7")
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieRide" type="Node" parent="StateMachine" index="10" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeWheelieRide" type="Node" parent="StateMachine" index="12" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
 script = ExtResource("15_o3xhh")
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")

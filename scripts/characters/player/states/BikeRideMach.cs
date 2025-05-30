@@ -51,29 +51,6 @@ public partial class BikeRideMach : CharacterState
 		return false;
 	}
 
-	private void SetDirection()
-	{
-		if (Input.IsActionJustPressed("ui_up"))
-		{
-			Controller.Direction = Vector2.Up;
-			Controller.TargetPosition = new Vector2(0, -16);
-		}
-		else if (Input.IsActionJustPressed("ui_down"))
-		{
-			Controller.Direction = Vector2.Down;
-			Controller.TargetPosition = new Vector2(0, 16);
-		}
-		else if (Input.IsActionJustPressed("ui_left"))
-		{
-			Controller.Direction = Vector2.Left;
-			Controller.TargetPosition = new Vector2(-16, 0);
-		}
-		else if (Input.IsActionJustPressed("ui_right"))
-		{
-			Controller.Direction = Vector2.Right;
-			Controller.TargetPosition = new Vector2(16, 0);
-		}
-	}
 
 	private void ProcessPress(double delta)
 	{

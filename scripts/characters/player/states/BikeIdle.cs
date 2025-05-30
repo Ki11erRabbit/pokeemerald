@@ -12,8 +12,6 @@ public partial class BikeIdle : CharacterState
 	public override void Enter()
 	{
 		GameState.GameState.RideBike();
-		System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace();
-		Debug.Log(trace.ToString());
 	}
 
 	public override void Move(double delta)
@@ -42,33 +40,7 @@ public partial class BikeIdle : CharacterState
         return false;
     }
     
-    private void SetDirection()
-	{
-		if (Input.IsActionJustPressed("ui_up"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Up);
-			Controller.Direction = Vector2.Up;
-			Controller.TargetPosition = new Vector2(0, -16);
-		}
-		else if (Input.IsActionJustPressed("ui_down"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Down);
-			Controller.Direction = Vector2.Down;
-			Controller.TargetPosition = new Vector2(0, 16);
-		}
-		else if (Input.IsActionJustPressed("ui_left"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Left);
-			Controller.Direction = Vector2.Left;
-			Controller.TargetPosition = new Vector2(-16, 0);
-		}
-		else if (Input.IsActionJustPressed("ui_right"))
-		{
-			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Right);
-			Controller.Direction = Vector2.Right;
-			Controller.TargetPosition = new Vector2(16, 0);
-		}
-	}
+
 
 	private void ProcessPress(double delta)
 	{
@@ -86,15 +58,7 @@ public partial class BikeIdle : CharacterState
 		{
 			Machine.TransitionToState("Idle");
 		}
-		if (Input.IsActionPressed("ui_cancel"))
-		{
-			if (GameState.GameState.RidingAcroBike())
-			{
-				Machine.TransitionToState("BikeStartWheelie");
-				Debug.Log("Starting wheelie");
-				return;
-			}
-		}
+		
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
@@ -104,8 +68,26 @@ public partial class BikeIdle : CharacterState
 			if (_holdTime > HoldThreshold)
 			{
 				
+				if (Input.IsActionPressed("ui_cancel"))
+				{
+					if (GameState.GameState.RidingAcroBike())
+					{
+						Machine.TransitionToState("BikeStartWheelieRide");
+						Machine.GetCurrentState<BikeStartWheelieRide>().SetUp(this);
+						return;
+					}
+				}
+				
 				Machine.TransitionToState("BikeRide");
 				
+			}
+		}
+		else if (Input.IsActionPressed("ui_cancel"))
+		{
+			if (GameState.GameState.RidingAcroBike())
+			{
+				Machine.TransitionToState("BikeStartWheelieIdle");
+				return;
 			}
 		}
 	}
