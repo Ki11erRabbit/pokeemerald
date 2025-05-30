@@ -1,13 +1,15 @@
-[gd_scene load_steps=122 format=3 uid="uid://didjjlyomyes2"]
+[gd_scene load_steps=124 format=3 uid="uid://didjjlyomyes2"]
 
 [ext_resource type="PackedScene" uid="uid://bus3gc6sk80pf" path="res://scenes/characters/Character.tscn" id="1_db84v"]
 [ext_resource type="Texture2D" uid="uid://4holuep1sky7" path="res://assets/player/brendon.png" id="2_b7oxf"]
 [ext_resource type="Script" uid="uid://cbyqdy3aq0jpb" path="res://scripts/characters/player/Player.cs" id="2_c12fh"]
-[ext_resource type="Script" uid="uid://c66abkflxw4e2" path="res://scripts/characters/player/PlayerAnimation.cs" id="3_k835w"]
 [ext_resource type="Texture2D" uid="uid://cjimgalhuxd7j" path="res://assets/player/brendon_bike.png" id="3_lces5"]
 [ext_resource type="Script" uid="uid://n2kxj4kmb5xl" path="res://scripts/characters/player/PlayerController.cs" id="4_7xy7u"]
 [ext_resource type="Script" uid="uid://byjek0kym6qht" path="res://scripts/characters/player/states/Walk.cs" id="5_imd1d"]
+[ext_resource type="Script" uid="uid://cd20plh2wir17" path="res://scripts/characters/player/states/Idle.cs" id="6_5edqu"]
 [ext_resource type="Script" uid="uid://d3h4gimwg2ocx" path="res://scripts/utilities/state_machine/StateMachine.cs" id="6_k835w"]
+[ext_resource type="Script" uid="uid://cl51t6s5ra8e4" path="res://scripts/characters/player/states/Run.cs" id="7_wwjds"]
+[ext_resource type="Script" uid="uid://c0037y01b1b04" path="res://scripts/characters/player/states/Turn.cs" id="8_jevs6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ouea"]
 atlas = ExtResource("3_lces5")
@@ -980,29 +982,12 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="Animation" id="Animation_lces5"]
-resource_name = "wheelie_bounce"
-length = 0.2684
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Animation:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.133333, 0.266667),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(8, 4), Vector2(8, 0), Vector2(8, 4)]
-}
-
 [sub_resource type="Animation" id="Animation_jhxyj"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Animation:position")
+tracks/0/path = NodePath("../Animation/Animation:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -1014,7 +999,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Animation:offset")
+tracks/1/path = NodePath("../Animation/Animation:offset")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1022,6 +1007,23 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lces5"]
+resource_name = "wheelie_bounce"
+length = 0.2684
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Animation/Animation:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(8, 4), Vector2(8, 0), Vector2(8, 4)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5edqu"]
@@ -1034,20 +1036,56 @@ _data = {
 script = ExtResource("2_c12fh")
 CharacterController = NodePath("CharacterController")
 StateMachine = NodePath("StateMachine")
-StartingState = "Walk"
+StartingState = "Idle"
 
-[node name="Movement" parent="." index="1" node_paths=PackedStringArray("CharacterController")]
+[node name="Movement" parent="." index="1" node_paths=PackedStringArray("CharacterController", "StateMachine")]
 CharacterController = NodePath("../CharacterController")
+StateMachine = NodePath("../StateMachine")
 
 [node name="Camera2D" type="Camera2D" parent="." index="2"]
 position = Vector2(10, 10)
 
-[node name="Animation" type="Node2D" parent="." index="3" node_paths=PackedStringArray("AnimationPlayer", "CharacterMovement", "CharacterController", "AnimatedSprite")]
-script = ExtResource("3_k835w")
-AnimationPlayer = NodePath("AnimationPlayer")
-CharacterMovement = NodePath("../Movement")
+[node name="CharacterController" type="Node" parent="." index="3" node_paths=PackedStringArray("Movement")]
+script = ExtResource("4_7xy7u")
+Movement = NodePath("../Movement")
+
+[node name="StateMachine" type="Node" parent="." index="4" node_paths=PackedStringArray("User")]
+script = ExtResource("6_k835w")
+User = NodePath("..")
+
+[node name="Walk" type="Node" parent="StateMachine" index="0" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+script = ExtResource("5_imd1d")
+Controller = NodePath("../../CharacterController")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="Idle" type="Node" parent="StateMachine" index="1" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+script = ExtResource("6_5edqu")
+Controller = NodePath("../../CharacterController")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="Run" type="Node" parent="StateMachine" index="2" node_paths=PackedStringArray("Controller", "Controller", "Animation", "User", "Machine")]
+script = ExtResource("7_wwjds")
+Controller = NodePath("../../CharacterController")
+Controller = NodePath("../../CharacterController")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="Turn" type="Node" parent="StateMachine" index="3" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+script = ExtResource("8_jevs6")
+Controller = NodePath("../../CharacterController")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="Animation" parent="." index="6" node_paths=PackedStringArray("CharacterController", "AnimatedSprite", "StateMachine")]
 CharacterController = NodePath("../CharacterController")
 AnimatedSprite = NodePath("Animation")
+StateMachine = NodePath("../StateMachine")
 
 [node name="Animation" type="AnimatedSprite2D" parent="Animation" index="0"]
 texture_filter = 1
@@ -1056,18 +1094,7 @@ sprite_frames = SubResource("SpriteFrames_db84v")
 animation = &"idle_down"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Animation" index="1"]
+root_node = NodePath("")
 libraries = {
 &"": SubResource("AnimationLibrary_5edqu")
 }
-
-[node name="CharacterController" type="Node" parent="." index="4" node_paths=PackedStringArray("Movement")]
-script = ExtResource("4_7xy7u")
-Movement = NodePath("../Movement")
-
-[node name="StateMachine" type="Node" parent="." index="5" node_paths=PackedStringArray("User")]
-script = ExtResource("6_k835w")
-User = NodePath("..")
-
-[node name="Walk" type="Node" parent="StateMachine" index="0" node_paths=PackedStringArray("Controller")]
-script = ExtResource("5_imd1d")
-Controller = NodePath("../../CharacterController")

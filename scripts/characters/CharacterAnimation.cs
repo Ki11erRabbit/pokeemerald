@@ -1,21 +1,30 @@
 using Godot;
 using System;
+using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters;
-public abstract partial class CharacterAnimation : Node2D
+public partial class CharacterAnimation : Node2D
 {
 	[ExportCategory("Nodes")]
 	[Export] public CharacterMovement CharacterMovement;
 	[Export] public CharacterController CharacterController;
 	[Export] public AnimatedSprite2D AnimatedSprite;
+	[Export] public Utils.StateMachine.StateMachine StateMachine;
 	
 	public override void _Ready()
 	{
 		CharacterMovement.Animation += PlayAnimation;
-		AnimatedSprite.AnimationFinished += AnimationFinished;
+		CustomReady();
 	}
 
-	public abstract void PlayAnimation(string animationType);
+	public void PlayAnimation()
+	{
+		StateMachine.GetCurrentState<CharacterState>().animate(AnimatedSprite);
+	}
 
-	public abstract void AnimationFinished();
+	public virtual void CustomReady()
+	{
+		
+	}
+	
 }

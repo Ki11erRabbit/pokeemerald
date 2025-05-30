@@ -4,13 +4,14 @@ namespace PokeEmerald.Utils.StateMachine;
 public partial class State : Node
 {
     [Export] public Node User;
+    [Export] public StateMachine Machine;
 
-    public void EnterState()
+    public virtual void EnterState()
     {
         
     }
 
-    public void ExitState()
+    public virtual void ExitState()
     {
         
     }

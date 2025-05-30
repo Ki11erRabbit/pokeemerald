@@ -18,4 +18,15 @@ internal static class Debug
         GD.PrintErr(msg);
     }
 #endif
+    
+    internal static void Log(string msg)
+#if DEBUG
+    {
+        GD.Print(msg);
+    }
+#else
+    {
+        
+    }
+#endif
 }

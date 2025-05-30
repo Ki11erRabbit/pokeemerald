@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bus3gc6sk80pf"]
+[gd_scene load_steps=5 format=3 uid="uid://bus3gc6sk80pf"]
 
 [ext_resource type="Script" uid="uid://ed4uhpgbxpm4" path="res://scripts/characters/Character.cs" id="1_52avm"]
 [ext_resource type="Script" uid="uid://7g127d0bua6s" path="res://scripts/characters/CharacterMovement.cs" id="2_typq7"]
+[ext_resource type="Script" uid="uid://cgj4wp1001syy" path="res://scripts/characters/CharacterAnimation.cs" id="3_typq7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fuqhm"]
 size = Vector2(16, 16)
@@ -21,3 +22,7 @@ Character = NodePath("..")
 position = Vector2(8, 8)
 target_position = Vector2(0, 24)
 collide_with_areas = true
+
+[node name="Animation" type="Node2D" parent="." node_paths=PackedStringArray("CharacterMovement")]
+script = ExtResource("3_typq7")
+CharacterMovement = NodePath("../Movement")

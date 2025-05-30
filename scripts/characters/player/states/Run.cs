@@ -1,24 +1,38 @@
 using Godot;
 using System;
 using PokeEmerald.Characters.StateMachine;
-using PokeEmerald.Utils.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Walk : CharacterState
+public partial class Run : CharacterState
 {
+    [ExportCategory("Controller")] 
+	[Export]
+	public PlayerController Controller;
+
+	[ExportCategory("Vars")] 
+	[Export] public double HoldThreshold = 0.1f;
+	private bool _sameDirection = false;
+	private double _holdTime = 0;
+	
 	public override void _Process(double delta)
 	{
 		SetDirection();
 		ProcessPress(delta);
 	}
 	
-	public override void Move(double delta)
+	public override void ExitState()
 	{
-		delta *= Globals.Instance.TileSize * Globals.Instance.WalkingSpeed;
-		_character.Position = _character.Position.MoveToward(TargetPosition, (float)delta);
+		_holdTime = 0;
+		_sameDirection = false;
 	}
 	
+	public override void Move(double delta)
+	{
+		delta *= Globals.Instance.TileSize * Globals.Instance.RunningSpeed;
+		_character.Position = _character.Position.MoveToward(TargetPosition, (float)delta);
+	}
+
 	public override bool IsMoving()
 	{
 		return true;
@@ -32,10 +46,10 @@ public partial class Walk : CharacterState
 	public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
 	{
 		SetAnimationState([
-			StateMachine.AnimationState.walk_up, 
-			StateMachine.AnimationState.walk_left, 
-			StateMachine.AnimationState.walk_right, 
-			StateMachine.AnimationState.walk_down
+			StateMachine.AnimationState.run_up, 
+			StateMachine.AnimationState.run_left, 
+			StateMachine.AnimationState.run_right, 
+			StateMachine.AnimationState.run_down
 		]);
 		return false;
 	}
@@ -44,21 +58,25 @@ public partial class Walk : CharacterState
 	{
 		if (Input.IsActionJustPressed("ui_up"))
 		{
+			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Up);
 			Controller.Direction = Vector2.Up;
 			Controller.TargetPosition = new Vector2(0, -16);
 		}
 		else if (Input.IsActionJustPressed("ui_down"))
 		{
+			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Down);
 			Controller.Direction = Vector2.Down;
 			Controller.TargetPosition = new Vector2(0, 16);
 		}
 		else if (Input.IsActionJustPressed("ui_left"))
 		{
+			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Left);
 			Controller.Direction = Vector2.Left;
 			Controller.TargetPosition = new Vector2(-16, 0);
 		}
 		else if (Input.IsActionJustPressed("ui_right"))
 		{
+			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Right);
 			Controller.Direction = Vector2.Right;
 			Controller.TargetPosition = new Vector2(16, 0);
 		}
@@ -69,12 +87,8 @@ public partial class Walk : CharacterState
 		if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
 		    Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
 		{
-			if (AtTargetPosition())
-			{
-				Debug.Log("\tTransitioning to idle");
-				Machine.TransitionToState("Idle");
-			}
 			
+			_holdTime = 0.0f;
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
@@ -85,17 +99,19 @@ public partial class Walk : CharacterState
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-			
-			if (Input.IsActionPressed("ui_cancel"))
+			_holdTime += delta;
+
+			if (_holdTime > HoldThreshold)
 			{
-				Machine.TransitionToState("Run");
-			}
-			
-			if (AtTargetPosition())
-			{
-				EnterState();
+				if (!Input.IsActionPressed("ui_cancel"))
+				{
+					Machine.TransitionToState("Walk");
+				}
+				else
+				{
+					EnterState();
+				}
 			}
 		}
 	}
-	
 }

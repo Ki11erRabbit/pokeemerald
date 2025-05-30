@@ -26,11 +26,7 @@ public partial class StateMachine : Node
     public void ChangeState(State newState)
     {
         if (CurrentState != null) CurrentState.ExitState();
-        if (newState == null)
-        {
-            GD.PrintErr("newState is null");
-            return;
-        }
+        Debug.Assert(newState != null, "newState != null");
         CurrentState = newState;
         CurrentState.EnterState();
         
@@ -41,6 +37,18 @@ public partial class StateMachine : Node
                 continue;
             }
             state.SetProcess(child == CurrentState);
+            Debug.Log($"Setting processing for {child.Name} to {child == CurrentState}");
         }
+    }
+
+    public void TransitionToState(string newState)
+    {
+        var node = GetNode<State>(newState);
+        ChangeState(node);
+    }
+
+    public S GetCurrentState<S>() where S : State
+    {
+        return CurrentState as S;
     }
 }

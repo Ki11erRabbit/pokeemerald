@@ -29,13 +29,13 @@ public partial class Globals : Node
         );
     }
 
-    public double GetBikeSpeed()
+    public double GetBikeSpeed(bool doingWheelie)
     {
         Debug.Assert(GameState.GameState.CanRideBike(), "Player shouldn't be able to ride bike");
         return GameState.GameState.Instance.BikeState switch
         {
             GameState.BikeState.NoBike => 0.0,
-            GameState.BikeState.AcroBike => GameState.GameState.Instance.DoingWheelie ? AcroCyclingWheelieSpeed : AcroCyclingSpeed,
+            GameState.BikeState.AcroBike => doingWheelie ? AcroCyclingWheelieSpeed : AcroCyclingSpeed,
             GameState.BikeState.MachBike => MachCyclingSpeed,
         };
     }

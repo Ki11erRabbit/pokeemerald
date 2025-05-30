@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters;
 
@@ -19,18 +20,28 @@ public enum MovementState
     Diving,
 }
 
+public enum WheelieState
+{
+    ToWheelie,
+    FromWheelie,
+    InWheelie,
+    NoWheelie,
+}
+
 public partial class CharacterMovement : Node
 {
     [Signal]
-    public delegate void AnimationEventHandler(string animationType);
+    public delegate void AnimationEventHandler();
 
     [ExportCategory("Nodes")] 
     [Export] public Character Character;
     [Export] public CharacterController CharacterController;
+    [Export] public Utils.StateMachine.StateMachine StateMachine;
     [ExportCategory("Movement")] 
     [Export] public Vector2 TargetPosition = Vector2.Down;
     [Export] public MovingState CurrentMovingState = MovingState.Idle;
     [Export] public MovementState CurrentMovementState = MovementState.Grounded;
+    public WheelieState WheelieState = WheelieState.NoWheelie;
 
     public override void _Ready()
     {
@@ -119,7 +130,7 @@ public partial class CharacterMovement : Node
     public void StartWalking()
     {
         if (IsMoving()) return;
-        EmitSignal(SignalName.Animation, "walk");
+        EmitSignal(SignalName.Animation);
         TargetPosition = Character.Position + CharacterController.Direction * Globals.Instance.TileSize;
         CurrentMovingState = MovingState.Walking;
     }
@@ -186,64 +197,20 @@ public partial class CharacterMovement : Node
     
     public void Move(double delta)
     {
-        if (IsWalking())
+        var currentState = StateMachine.GetCurrentState<CharacterState>();
+        if (currentState.IsMoving())
         {
-            delta *= Globals.Instance.TileSize * Globals.Instance.WalkingSpeed;
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
-
+            currentState.Move(delta);
         }
-        else if (IsRunning())
+        
+        if (currentState.AtTargetPosition())
         {
-            delta *= Globals.Instance.TileSize * Globals.Instance.RunningSpeed;
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
-        }
-        else if (IsCycling())
-        {
-            delta *= Globals.Instance.TileSize * Globals.Instance.GetBikeSpeed();
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
-
-        }
-        else if (IsJumping())
-        {
-            if (CurrentMovingState == MovingState.Running)
-            {
-                if (CurrentMovementState == MovementState.Cycling)
-                {
-                    delta *= Globals.Instance.TileSize * Globals.Instance.GetBikeSpeed();
-                }
-                else
-                {
-                    delta *= Globals.Instance.TileSize * Globals.Instance.RunningSpeed;
-                }
-            }
-            else if (CurrentMovingState == MovingState.Walking)
-            {
-                delta *= Globals.Instance.TileSize * Globals.Instance.WalkingSpeed;
-            }
-            else
-            {
-                Debug.Assert(true, "Invalid moving state");
-            }
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
-            // TODO: Animate Sprite while jumping
-        }
-        else if (IsSwimming())
-        {
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);// TODO: add tilesize constant and swim rate
-
-        }
-        else if (IsDiving())
-        {
-            Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);// TODO: add tilesize constant and dive rate
-
-        }
-        if (Character.Position.DistanceTo(TargetPosition) < 1f)
-        {
-            StartIdling();
+            SnapPositionToGrid();
+            //currentState.StartIdling();
         }
     }
     public void SnapPositionToGrid()
     {
-        Globals.Instance.SnapToGrid(Character.Position);
+        Character.Position = Globals.Instance.SnapToGrid(Character.Position);
     }
 }
