@@ -1,13 +1,11 @@
 using Godot;
-using System;
 using PokeEmerald.Characters.StateMachine;
-using PokeEmerald.Utils.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Walk : CharacterState
+public partial class BikeRideMach : CharacterState
 {
-	public override void _Process(double delta)
+    public override void _Process(double delta)
 	{
 		SetDirection();
 		ProcessPress(delta);
@@ -15,7 +13,7 @@ public partial class Walk : CharacterState
 	
 	public override void Move(double delta)
 	{
-		delta *= Globals.Instance.TileSize * Globals.Instance.WalkingSpeed;
+		delta *= Globals.Instance.TileSize * Globals.Instance.MachCyclingSpeed;
 		_character.Position = _character.Position.MoveToward(TargetPosition, (float)delta);
 	}
 	
@@ -26,17 +24,30 @@ public partial class Walk : CharacterState
 
 	public override void StartIdling()
 	{
-		Machine.TransitionToState("Idle");
+		Machine.TransitionToState("BikeIdle");
 	}
 
 	public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
 	{
-		SetAnimationState([
-			StateMachine.AnimationState.walk_up, 
-			StateMachine.AnimationState.walk_left, 
-			StateMachine.AnimationState.walk_right, 
-			StateMachine.AnimationState.walk_down
-		]);
+		if (GameState.GameState.RidingAcroBike())
+		{
+			SetAnimationState([
+				StateMachine.AnimationState.bike_acro_ride_up, 
+				StateMachine.AnimationState.bike_acro_ride_left, 
+				StateMachine.AnimationState.bike_acro_ride_right, 
+				StateMachine.AnimationState.bike_acro_ride_down
+			]);
+		}
+		else
+		{
+			SetAnimationState([
+				StateMachine.AnimationState.bike_mach_ride_up, 
+				StateMachine.AnimationState.bike_mach_ride_left, 
+				StateMachine.AnimationState.bike_mach_ride_right, 
+				StateMachine.AnimationState.bike_mach_ride_down
+			]);
+		}
+		
 		return false;
 	}
 
@@ -66,34 +77,28 @@ public partial class Walk : CharacterState
 
 	private void ProcessPress(double delta)
 	{
-		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
-		    !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right"))
+		if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
+		    Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
 		{
 			if (AtTargetPosition())
 			{
-				Machine.TransitionToState("Idle");
+				Machine.TransitionToState("BikeIdle");
 			}
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
-			Machine.TransitionToState("BikeIdle");
+			Machine.TransitionToState("Idle");
 		}
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-			
-			if (Input.IsActionPressed("ui_cancel"))
-			{
-				Machine.TransitionToState("Run");
-			}
-			
+
 			if (AtTargetPosition())
 			{
 				EnterState();
 			}
 		}
 	}
-	
 }

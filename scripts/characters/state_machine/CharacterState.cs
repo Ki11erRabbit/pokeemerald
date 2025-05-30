@@ -64,11 +64,23 @@ public abstract partial class CharacterState : State
     {
         Animation.PlayAnimation();
         SetTargetPosition();
+        Enter();
+    }
+
+    public virtual void Enter()
+    {
+        
     }
 
     public override void _Ready()
     {
         _character = User as Character;
+        CustomReady();
+    }
+
+    public virtual void CustomReady()
+    {
+        
     }
     
     public virtual void SetUp(CharacterState _)

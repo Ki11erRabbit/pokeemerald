@@ -1,13 +1,13 @@
 using Godot;
-using System;
 using PokeEmerald.Characters.StateMachine;
-using PokeEmerald.Utils.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Walk : CharacterState
+public partial class BikeRide : CharacterState
 {
-	public override void _Process(double delta)
+	[Export] public double SpeedUpThreshold = 0.3;
+	private double _speedUpTime = 0.0;
+    public override void _Process(double delta)
 	{
 		SetDirection();
 		ProcessPress(delta);
@@ -15,7 +15,7 @@ public partial class Walk : CharacterState
 	
 	public override void Move(double delta)
 	{
-		delta *= Globals.Instance.TileSize * Globals.Instance.WalkingSpeed;
+		delta *= Globals.Instance.TileSize * Globals.Instance.AcroCyclingSpeed;
 		_character.Position = _character.Position.MoveToward(TargetPosition, (float)delta);
 	}
 	
@@ -26,17 +26,18 @@ public partial class Walk : CharacterState
 
 	public override void StartIdling()
 	{
-		Machine.TransitionToState("Idle");
+		Machine.TransitionToState("BikeIdle");
 	}
 
 	public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
 	{
 		SetAnimationState([
-			StateMachine.AnimationState.walk_up, 
-			StateMachine.AnimationState.walk_left, 
-			StateMachine.AnimationState.walk_right, 
-			StateMachine.AnimationState.walk_down
+			StateMachine.AnimationState.bike_acro_ride_up, 
+			StateMachine.AnimationState.bike_acro_ride_left, 
+			StateMachine.AnimationState.bike_acro_ride_right, 
+			StateMachine.AnimationState.bike_acro_ride_down
 		]);
+		
 		return false;
 	}
 
@@ -71,29 +72,34 @@ public partial class Walk : CharacterState
 		{
 			if (AtTargetPosition())
 			{
-				Machine.TransitionToState("Idle");
+				Machine.TransitionToState("BikeIdle");
 			}
+			_speedUpTime = 0;
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
-			Machine.TransitionToState("BikeIdle");
+			Machine.TransitionToState("Idle");
 		}
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
+			_speedUpTime += delta;
 			
 			if (Input.IsActionPressed("ui_cancel"))
 			{
-				Machine.TransitionToState("Run");
+				if (GameState.GameState.RidingAcroBike()) Machine.TransitionToState("BikeStartWheelie");
 			}
-			
-			if (AtTargetPosition())
+
+			if (_speedUpTime > SpeedUpThreshold && !GameState.GameState.RidingAcroBike())
+			{
+				Machine.TransitionToState("BikeRideMach");
+			}
+			else if (AtTargetPosition())
 			{
 				EnterState();
 			}
 		}
 	}
-	
 }

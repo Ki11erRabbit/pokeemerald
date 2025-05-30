@@ -1,59 +1,48 @@
 using Godot;
-using System;
 using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Idle : CharacterState
+public partial class BikeIdle : CharacterState
 {
-	[ExportCategory("Vars")] 
-	[Export] public double HoldThreshold = 0.1f;
+	[Export] public double HoldThreshold = 0.1;
 	private bool _sameDirection = false;
-	[Export] private double _holdTime = 0;
-    public override void _Process(double delta)
-	{
-		SetDirection();
-		ProcessPress(delta);
-	}
-    
+	private double _holdTime = 0.0;
+
 	public override void Enter()
 	{
-		GameState.GameState.StopRidingBike();
-	}
-
-	public override void ExitState()
-	{
-		_holdTime = 0;
-		_sameDirection = false;
+		GameState.GameState.RideBike();
+		System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace();
+		Debug.Log(trace.ToString());
 	}
 
 	public override void Move(double delta)
-	{
-		
-	}
+    {
+        
+    }
 
-	public override void StartIdling()
-	{
-		
-	}
+    public override bool IsMoving()
+    {
+        return false;
+    }
 
-	public override bool IsMoving()
-	{
-		return false;
-	}
+    public override void StartIdling()
+    {
+        
+    }
 
-	public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
-	{
-		SetAnimationState([
-			StateMachine.AnimationState.idle_up, 
-			StateMachine.AnimationState.idle_left, 
-			StateMachine.AnimationState.idle_right, 
-			StateMachine.AnimationState.idle_down
-		]);
-		return false;
-	}
-
-	private void SetDirection()
+    public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
+    {
+        SetAnimationState([
+            StateMachine.AnimationState.bike_idle_up, 
+            StateMachine.AnimationState.bike_idle_left, 
+            StateMachine.AnimationState.bike_idle_right, 
+            StateMachine.AnimationState.bike_idle_down
+        ]);
+        return false;
+    }
+    
+    private void SetDirection()
 	{
 		if (Input.IsActionJustPressed("ui_up"))
 		{
@@ -66,7 +55,6 @@ public partial class Idle : CharacterState
 			_sameDirection = Controller.Direction.IsEqualApprox(Vector2.Down);
 			Controller.Direction = Vector2.Down;
 			Controller.TargetPosition = new Vector2(0, 16);
-			Debug.Log("Pressing down");
 		}
 		else if (Input.IsActionJustPressed("ui_left"))
 		{
@@ -89,22 +77,23 @@ public partial class Idle : CharacterState
 		{
 			if (_sameDirection)
 			{
-				Machine.TransitionToState("Walk");
-				Machine.GetCurrentState<CharacterState>().SetTargetPosition();
-				Debug.Log("Walking via same direction");
-			}
-			else
-			{
-				Machine.TransitionToState("Turn");
-				Machine.GetCurrentState<Turn>().SetUp(this);
-				Debug.Log("Turning");
+				Machine.TransitionToState("BikeRide");
 			}
 			_holdTime = 0.0f;
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
-			Machine.TransitionToState("BikeIdle");
+			Machine.TransitionToState("Idle");
+		}
+		if (Input.IsActionPressed("ui_cancel"))
+		{
+			if (GameState.GameState.RidingAcroBike())
+			{
+				Machine.TransitionToState("BikeStartWheelie");
+				Debug.Log("Starting wheelie");
+				return;
+			}
 		}
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
@@ -114,19 +103,16 @@ public partial class Idle : CharacterState
 
 			if (_holdTime > HoldThreshold)
 			{
-				if (Input.IsActionPressed("ui_cancel"))
-				{
-					Machine.TransitionToState("Run");
-					Machine.GetCurrentState<CharacterState>().SetTargetPosition();
-					Debug.Log("Running via holding down");
-				}
-				else
-				{
-					Machine.TransitionToState("Walk");
-					Machine.GetCurrentState<CharacterState>().SetTargetPosition();
-					Debug.Log("\tWalking via holding down");
-				}
+				
+				Machine.TransitionToState("BikeRide");
+				
 			}
 		}
 	}
+
+    public override void _Process(double delta)
+    {
+        SetDirection();
+        ProcessPress(delta);
+    }
 }

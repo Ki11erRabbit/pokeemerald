@@ -1,60 +1,40 @@
 using Godot;
-using System;
 using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Run : CharacterState
+public partial class BikeWheelieIdle : CharacterState
 {
-    [ExportCategory("Controller")] 
-	[Export]
-	public PlayerController Controller;
-
-	[ExportCategory("Vars")] 
-	[Export] public double HoldThreshold = 0.1f;
+    [Export] public double HoldThreshold = 0.1;
 	private bool _sameDirection = false;
-	private double _holdTime = 0;
-	
-	public override void _Process(double delta)
-	{
-		SetDirection();
-		ProcessPress(delta);
-	}
-	
-	public override void ExitState()
-	{
-		_holdTime = 0;
-		_sameDirection = false;
-	}
-	
-	public override void Move(double delta)
-	{
-		delta *= Globals.Instance.TileSize * Globals.Instance.RunningSpeed;
-		_character.Position = _character.Position.MoveToward(TargetPosition, (float)delta);
-	}
+	private double _holdTime = 0.0;
+    public override void Move(double delta)
+    {
+        
+    }
 
-	public override bool IsMoving()
-	{
-		return true;
-	}
+    public override bool IsMoving()
+    {
+        return false;
+    }
 
-	public override void StartIdling()
-	{
-		Machine.TransitionToState("Idle");
-	}
+    public override void StartIdling()
+    {
+        
+    }
 
-	public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
-	{
-		SetAnimationState([
-			StateMachine.AnimationState.run_up, 
-			StateMachine.AnimationState.run_left, 
-			StateMachine.AnimationState.run_right, 
-			StateMachine.AnimationState.run_down
-		]);
-		return false;
-	}
-
-	private void SetDirection()
+    public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
+    {
+        SetAnimationState([
+            StateMachine.AnimationState.bike_acro_wheelie_idle_up, 
+            StateMachine.AnimationState.bike_acro_wheelie_idle_left, 
+            StateMachine.AnimationState.bike_acro_wheelie_idle_right, 
+            StateMachine.AnimationState.bike_acro_wheelie_idle_down
+        ]);
+        return false;
+    }
+    
+    private void SetDirection()
 	{
 		if (Input.IsActionJustPressed("ui_up"))
 		{
@@ -87,13 +67,22 @@ public partial class Run : CharacterState
 		if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
 		    Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
 		{
-			
+			if (_sameDirection)
+			{
+				Machine.TransitionToState("BikeWheelieRide");
+			}
 			_holdTime = 0.0f;
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
-			Machine.TransitionToState("BikeIdle");
+			Machine.TransitionToState("Idle");
+		}
+		
+		if (!Input.IsActionPressed("ui_cancel"))
+		{
+			Machine.TransitionToState("BikeStopWheelie");
+			return;
 		}
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
@@ -103,15 +92,14 @@ public partial class Run : CharacterState
 
 			if (_holdTime > HoldThreshold)
 			{
-				if (!Input.IsActionPressed("ui_cancel"))
-				{
-					Machine.TransitionToState("Walk");
-				}
-				else
-				{
-					EnterState();
-				}
+				Machine.TransitionToState("BikeWheelieRide");
 			}
 		}
 	}
+
+    public override void _Process(double delta)
+    {
+        SetDirection();
+        ProcessPress(delta);
+    }
 }

@@ -1,41 +1,50 @@
 using Godot;
-using System;
 using PokeEmerald.Characters.StateMachine;
-using PokeEmerald.Utils.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Walk : CharacterState
+public partial class BikeStartWheelie : CharacterState
 {
-	public override void _Process(double delta)
+	[Export] public AnimatedSprite2D AnimatedSprite;
+	private bool _isMoving = false;
+	
+	public override void Enter()
+	{
+		_isMoving = false;
+	}
+    public override void _Process(double delta)
 	{
 		SetDirection();
 		ProcessPress(delta);
 	}
-	
+
+	public override void CustomReady()
+	{
+		AnimatedSprite.AnimationFinished += AnimationFinished;
+	}
+
 	public override void Move(double delta)
 	{
-		delta *= Globals.Instance.TileSize * Globals.Instance.WalkingSpeed;
+		delta *= Globals.Instance.TileSize * Globals.Instance.AcroCyclingWheelieSpeed;
 		_character.Position = _character.Position.MoveToward(TargetPosition, (float)delta);
 	}
 	
 	public override bool IsMoving()
 	{
-		return true;
+		return _isMoving;
 	}
 
 	public override void StartIdling()
 	{
-		Machine.TransitionToState("Idle");
 	}
 
 	public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
 	{
 		SetAnimationState([
-			StateMachine.AnimationState.walk_up, 
-			StateMachine.AnimationState.walk_left, 
-			StateMachine.AnimationState.walk_right, 
-			StateMachine.AnimationState.walk_down
+			StateMachine.AnimationState.bike_acro_wheelie_start_up, 
+			StateMachine.AnimationState.bike_acro_wheelie_start_left, 
+			StateMachine.AnimationState.bike_acro_wheelie_start_right, 
+			StateMachine.AnimationState.bike_acro_wheelie_start_down
 		]);
 		return false;
 	}
@@ -71,29 +80,49 @@ public partial class Walk : CharacterState
 		{
 			if (AtTargetPosition())
 			{
-				Machine.TransitionToState("Idle");
+				_isMoving = false;
 			}
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
-			Machine.TransitionToState("BikeIdle");
+			Machine.TransitionToState("Idle");
 		}
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-			
-			if (Input.IsActionPressed("ui_cancel"))
-			{
-				Machine.TransitionToState("Run");
-			}
+
+			_isMoving = true;
 			
 			if (AtTargetPosition())
 			{
-				EnterState();
 			}
 		}
 	}
-	
+
+	public void AnimationFinished()
+	{
+		Debug.Log("\t\tAnimationFinished");
+		if (CanProcess())
+		{
+			if (!Input.IsActionPressed("ui_cancel"))
+			{
+				Debug.Log("\t\tStopping Wheelie");
+				Machine.TransitionToState("BikeStopWheelie");
+			}
+			else
+			{
+				Debug.Log("\t\tStarting Wheelie");
+				if (_isMoving)
+				{
+					Machine.TransitionToState("BikeWheelieRide");
+				}
+				else
+				{
+					Machine.TransitionToState("BikeWheelieIdle");
+				}
+			}
+		}
+	}
 }
