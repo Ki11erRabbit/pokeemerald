@@ -5,6 +5,7 @@ namespace PokeEmerald.Characters.Player.States;
 
 public partial class BikeStopWheelieIdle : BikeWheelieTransitionState
 {
+
 	public override void _Process(double delta)
 	{
 		SetDirection();
@@ -54,10 +55,10 @@ public partial class BikeStopWheelieIdle : BikeWheelieTransitionState
 	protected override void SetStartFrame()
 	{
 		SetAnimationState([
-			StateMachine.AnimationState.bike_acro_wheelie_end_up, 
-			StateMachine.AnimationState.bike_acro_wheelie_end_left, 
-			StateMachine.AnimationState.bike_acro_wheelie_end_right, 
-			StateMachine.AnimationState.bike_acro_wheelie_end_down
+			StateMachine.AnimationState.bike_acro_wheelie_start_up, 
+			StateMachine.AnimationState.bike_acro_wheelie_start_left, 
+			StateMachine.AnimationState.bike_acro_wheelie_start_right, 
+			StateMachine.AnimationState.bike_acro_wheelie_start_down
 		]);
 	}
 

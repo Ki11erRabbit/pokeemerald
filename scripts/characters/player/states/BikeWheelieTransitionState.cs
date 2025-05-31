@@ -13,6 +13,8 @@ public abstract partial class BikeWheelieTransitionState : CharacterState
     {
         base.EnterState();
         SetStartFrame();
+        _frameTime = 0.0;
+        Debug.Log("\t\t\tAnimation Started: " + AnimationState);
         AnimatedSprite.Play(AnimationState.ToString());
     }
 
@@ -22,12 +24,11 @@ public abstract partial class BikeWheelieTransitionState : CharacterState
         if (_frameTime >= FrameThreshold)
         {
             SetEndFrame();
+            Debug.Log("Will be animating: " + AnimationState.ToString());
             return true;
         }
-        else
-        {
-            SetStartFrame();
-        }
+        Debug.Log("Will be animating: " + AnimationState.ToString());
+        SetStartFrame();
         
         return false;
     }

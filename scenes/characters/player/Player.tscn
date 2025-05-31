@@ -1135,6 +1135,7 @@ Machine = NodePath("..")
 [node name="BikeStartWheelieIdle" type="Node" parent="StateMachine" index="7" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
 script = ExtResource("12_omv6f")
 AnimatedSprite = NodePath("../../Animation/Animation")
+FrameThreshold = 0.3
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
@@ -1143,6 +1144,7 @@ Machine = NodePath("..")
 [node name="BikeStartWheelieRide" type="Node" parent="StateMachine" index="8" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
 script = ExtResource("13_yr7ad")
 AnimatedSprite = NodePath("../../Animation/Animation")
+FrameThreshold = 0.3
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
