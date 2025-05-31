@@ -6,8 +6,10 @@ namespace PokeEmerald.Characters.Player.States;
 public partial class BikeWheelieIdle : CharacterState
 {
     [Export] public double HoldThreshold = 0.1;
+    [Export] public double BounceHoldThreshold = 1;
 	private bool _sameDirection = false;
 	private double _holdTime = 0.0;
+	private double _bounceHoldTime = 0.0;
     public override void Move(double delta)
     {
         
@@ -61,8 +63,21 @@ public partial class BikeWheelieIdle : CharacterState
 		if (!Input.IsActionPressed("ui_cancel"))
 		{
 			Machine.TransitionToState("BikeStopWheelieIdle");
+			_bounceHoldTime = 0.0;
 			return;
 		}
+		if (Input.IsActionPressed("ui_cancel"))
+		{
+			_bounceHoldTime += delta;
+			Debug.Log("Increasing bounce hold time");
+			if (_bounceHoldTime > BounceHoldThreshold)
+			{
+				Machine.TransitionToState("BikeWheelieBounceIdle");
+				_bounceHoldTime = 0.0;
+				return;
+			}
+		}
+	
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))

@@ -19,7 +19,7 @@ public partial class BikeRideMach : CharacterState
 	public override void Move(double delta)
 	{
 		delta *= Globals.Instance.TileSize * Globals.Instance.MachCyclingSpeed;
-		_character.Position = _character.Position.MoveToward(TargetPosition, (float)delta);
+		Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
 	}
 	
 	public override bool IsMoving()

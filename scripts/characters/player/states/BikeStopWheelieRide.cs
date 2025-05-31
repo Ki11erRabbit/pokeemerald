@@ -32,7 +32,7 @@ public partial class BikeStopWheelieRide : BikeWheelieTransitionState
 	public override void Move(double delta)
 	{
 		delta *= Globals.Instance.TileSize * Globals.Instance.AcroCyclingWheelieSpeed;
-		_character.Position = _character.Position.MoveToward(TargetPosition, (float)delta);
+		Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
 	}
 	
 	public override bool IsMoving()

@@ -69,8 +69,8 @@ public abstract partial class CharacterState : State
     [ExportCategory("Vars")] 
     [Export] public Vector2 TargetPosition;
     public AnimationState AnimationState { get; set; } = AnimationState.idle_down;
-    protected AnimationState _previousAnimation;
-    protected Character _character;
+    protected AnimationState PreviousAnimation;
+    protected Character Character;
 
     public override void EnterState()
     {
@@ -86,7 +86,7 @@ public abstract partial class CharacterState : State
 
     public override void _Ready()
     {
-        _character = User as Character;
+        Character = User as Character;
         CustomReady();
     }
 
@@ -105,7 +105,7 @@ public abstract partial class CharacterState : State
         
     }
     
-    public void animate(AnimatedSprite2D animatedSprite)
+    public void Animate(AnimatedSprite2D animatedSprite)
     {
         Debug.Log("Configuring Animation State");
         if (ConfigureAnimationState(animatedSprite)) return;
@@ -143,12 +143,12 @@ public abstract partial class CharacterState : State
 
     public void SetTargetPosition()
     {
-        TargetPosition = _character.Position + Controller.Direction * Globals.Instance.TileSize;
+        TargetPosition = Character.Position + Controller.Direction * Globals.Instance.TileSize;
     }
 
     public bool AtTargetPosition()
     {
-        return _character.Position.DistanceTo(TargetPosition) < 0.8f;
+        return Character.Position.DistanceTo(TargetPosition) < 0.3f;
     }
     
     protected virtual void SetDirection()
@@ -177,6 +177,6 @@ public abstract partial class CharacterState : State
 
     public void SnapToGrid()
     {
-        TargetPosition = Globals.Instance.SnapToGrid(_character.Position);
+        TargetPosition = Globals.Instance.SnapToGrid(Character.Position);
     }
 }

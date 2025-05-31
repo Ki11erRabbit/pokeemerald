@@ -19,7 +19,7 @@ public partial class CharacterAnimation : Node2D
 
 	public void PlayAnimation()
 	{
-		StateMachine.GetCurrentState<CharacterState>().animate(AnimatedSprite);
+		StateMachine.GetCurrentState<CharacterState>().Animate(AnimatedSprite);
 	}
 
 	public virtual void CustomReady()
