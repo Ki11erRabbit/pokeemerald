@@ -90,9 +90,17 @@ public partial class BikeStopWheelieRide : CharacterState
 	{
 		if (CanProcess() && _shouldProcess)
 		{
-			_shouldProcess = false;
-			Machine.TransitionToState("BikeRide");
-			Machine.GetCurrentState<BikeRide>().SetUp(this);
+			if (Input.IsActionPressed("ui_cancel"))
+			{
+				Machine.TransitionToState("BikeWheelieRide");
+				Machine.GetCurrentState<BikeWheelieRide>().SetUp(this);
+			}
+			else
+			{
+				Debug.Log("Going back to bike ride");
+				Machine.TransitionToState("BikeRide");
+				Machine.GetCurrentState<BikeRide>().SetUp(this);
+			}
 		}
 	}
 }

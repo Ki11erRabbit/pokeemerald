@@ -48,17 +48,18 @@ public partial class BikeWheelieRide : CharacterState
 			{
 				Machine.TransitionToState("BikeWheelieIdle");
 			}
+		} 
+		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
+		     !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right") &&
+		     !Input.IsActionPressed("ui_cancel"))
+		{
+			Machine.TransitionToState("BikeStopWheelieIdle");
+			return;
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
 			Machine.TransitionToState("Idle");
-		}
-		
-		if (!Input.IsActionPressed("ui_cancel"))
-		{
-			Machine.TransitionToState("BikeStopWheelieRide");
-			return;
 		}
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||

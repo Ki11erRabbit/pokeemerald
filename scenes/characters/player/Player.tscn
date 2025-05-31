@@ -84,6 +84,22 @@ region = Rect2(24, 64, 24, 32)
 atlas = ExtResource("3_lces5")
 region = Rect2(24, 96, 24, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_02kne"]
+atlas = ExtResource("3_lces5")
+region = Rect2(0, 160, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eio3i"]
+atlas = ExtResource("3_lces5")
+region = Rect2(48, 160, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5rw8x"]
+atlas = ExtResource("3_lces5")
+region = Rect2(72, 160, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g374n"]
+atlas = ExtResource("3_lces5")
+region = Rect2(24, 160, 24, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_mcws0"]
 atlas = ExtResource("3_lces5")
 region = Rect2(0, 160, 24, 32)
@@ -168,33 +184,17 @@ region = Rect2(24, 352, 24, 32)
 atlas = ExtResource("3_lces5")
 region = Rect2(0, 128, 24, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_02kne"]
-atlas = ExtResource("3_lces5")
-region = Rect2(0, 160, 24, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_qse21"]
 atlas = ExtResource("3_lces5")
 region = Rect2(48, 128, 24, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_eio3i"]
-atlas = ExtResource("3_lces5")
-region = Rect2(48, 160, 24, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vbefo"]
 atlas = ExtResource("3_lces5")
 region = Rect2(72, 128, 24, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5rw8x"]
-atlas = ExtResource("3_lces5")
-region = Rect2(72, 160, 24, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_k50g5"]
 atlas = ExtResource("3_lces5")
 region = Rect2(24, 128, 24, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_g374n"]
-atlas = ExtResource("3_lces5")
-region = Rect2(24, 160, 24, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vm2e2"]
 atlas = ExtResource("3_lces5")
@@ -528,6 +528,38 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_02kne")
+}],
+"loop": false,
+"name": &"bike_acro_wheelie_end_down",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eio3i")
+}],
+"loop": false,
+"name": &"bike_acro_wheelie_end_left",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5rw8x")
+}],
+"loop": false,
+"name": &"bike_acro_wheelie_end_right",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g374n")
+}],
+"loop": false,
+"name": &"bike_acro_wheelie_end_up",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_mcws0")
 }],
 "loop": true,
@@ -629,9 +661,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_g4afk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_02kne")
 }],
 "loop": false,
 "name": &"bike_acro_wheelie_start_down",
@@ -640,9 +669,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qse21")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_eio3i")
 }],
 "loop": false,
 "name": &"bike_acro_wheelie_start_left",
@@ -651,9 +677,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vbefo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5rw8x")
 }],
 "loop": false,
 "name": &"bike_acro_wheelie_start_right",
@@ -662,9 +685,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k50g5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_g374n")
 }],
 "loop": false,
 "name": &"bike_acro_wheelie_start_up",
