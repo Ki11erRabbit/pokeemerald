@@ -26,6 +26,10 @@ public enum AnimationState
     bike_idle_up,
     bike_idle_left,
     bike_idle_right,
+    bike_turn_down,
+    bike_turn_up,
+    bike_turn_left,
+    bike_turn_right,
     bike_acro_ride_down,
     bike_acro_ride_up,
     bike_acro_ride_left,
@@ -50,6 +54,10 @@ public enum AnimationState
     bike_acro_wheelie_end_up,
     bike_acro_wheelie_end_left,
     bike_acro_wheelie_end_right,
+    bike_acro_wheelie_turn_down,
+    bike_acro_wheelie_turn_up,
+    bike_acro_wheelie_turn_left,
+    bike_acro_wheelie_turn_right,
 }
 
 public abstract partial class CharacterState : State
@@ -140,7 +148,7 @@ public abstract partial class CharacterState : State
 
     public bool AtTargetPosition()
     {
-        return _character.Position.DistanceTo(TargetPosition) < 1f;
+        return _character.Position.DistanceTo(TargetPosition) < 0.8f;
     }
     
     protected virtual void SetDirection()

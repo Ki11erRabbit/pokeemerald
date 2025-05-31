@@ -10,6 +10,11 @@ public partial class BikeRideMach : CharacterState
 		SetDirection();
 		ProcessPress(delta);
 	}
+    
+	public override void SetUp(CharacterState state)
+	{
+		TargetPosition = state.TargetPosition;
+	}
 	
 	public override void Move(double delta)
 	{
@@ -54,8 +59,8 @@ public partial class BikeRideMach : CharacterState
 
 	private void ProcessPress(double delta)
 	{
-		if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
-		    Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
+		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
+		    !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right"))
 		{
 			if (AtTargetPosition())
 			{

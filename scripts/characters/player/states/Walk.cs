@@ -12,6 +12,11 @@ public partial class Walk : CharacterState
 	{
 		_tapped = tapped;
 	}
+	
+	public override void SetUp(CharacterState state)
+	{
+		TargetPosition = state.TargetPosition;
+	}
 
 	public override void ExitState()
 	{
@@ -84,6 +89,7 @@ public partial class Walk : CharacterState
 			if (Input.IsActionPressed("ui_cancel"))
 			{
 				Machine.TransitionToState("Run");
+				Machine.GetCurrentState<Walk>().SetUp(this);
 			}
 			
 			if (AtTargetPosition())

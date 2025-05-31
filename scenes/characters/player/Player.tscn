@@ -1,4 +1,4 @@
-[gd_scene load_steps=133 format=3 uid="uid://didjjlyomyes2"]
+[gd_scene load_steps=151 format=3 uid="uid://didjjlyomyes2"]
 
 [ext_resource type="PackedScene" uid="uid://bus3gc6sk80pf" path="res://scenes/characters/Character.tscn" id="1_db84v"]
 [ext_resource type="Texture2D" uid="uid://4holuep1sky7" path="res://assets/player/brendon.png" id="2_b7oxf"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://c0037y01b1b04" path="res://scripts/characters/player/states/Turn.cs" id="8_jevs6"]
 [ext_resource type="Script" uid="uid://b12vw67o3wkhb" path="res://scripts/characters/player/states/BikeIdle.cs" id="9_7onrl"]
 [ext_resource type="Script" uid="uid://bwxmmafcqkmqn" path="res://scripts/characters/player/states/BikeRide.cs" id="10_o3xhh"]
+[ext_resource type="Script" uid="uid://xluggc02maa1" path="res://scripts/characters/player/states/BikeTurn.cs" id="10_wi6i7"]
 [ext_resource type="Script" uid="uid://pabqofmaqmf4" path="res://scripts/characters/player/states/BikeRideMach.cs" id="11_omv6f"]
 [ext_resource type="Script" uid="uid://b5had2w2rddoc" path="res://scripts/characters/player/states/BikeStartWheelieIdle.cs" id="12_omv6f"]
 [ext_resource type="Script" uid="uid://balv5o77eb7a4" path="res://scripts/characters/player/states/BikeStartWheelieRide.cs" id="13_yr7ad"]
@@ -19,6 +20,7 @@
 [ext_resource type="Script" uid="uid://0eknbqge1dmw" path="res://scripts/characters/player/states/BikeStopWheelieIdle.cs" id="14_yr7ad"]
 [ext_resource type="Script" uid="uid://cu0gypssev1qw" path="res://scripts/characters/player/states/BikeStopWheelieRide.cs" id="15_7n5xd"]
 [ext_resource type="Script" uid="uid://c531722iat6lw" path="res://scripts/characters/player/states/BikeWheelieRide.cs" id="15_o3xhh"]
+[ext_resource type="Script" uid="uid://pnottdvht4pv" path="res://scripts/characters/player/states/BikeWheelieTurn.cs" id="19_a7kqq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ouea"]
 atlas = ExtResource("3_lces5")
@@ -196,6 +198,38 @@ region = Rect2(72, 128, 24, 32)
 atlas = ExtResource("3_lces5")
 region = Rect2(24, 128, 24, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_7r60m"]
+atlas = ExtResource("3_lces5")
+region = Rect2(0, 256, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8msif"]
+atlas = ExtResource("3_lces5")
+region = Rect2(0, 160, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k82hw"]
+atlas = ExtResource("3_lces5")
+region = Rect2(48, 256, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w6ot3"]
+atlas = ExtResource("3_lces5")
+region = Rect2(48, 160, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fj4fy"]
+atlas = ExtResource("3_lces5")
+region = Rect2(72, 256, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ydxs"]
+atlas = ExtResource("3_lces5")
+region = Rect2(72, 160, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eje2e"]
+atlas = ExtResource("3_lces5")
+region = Rect2(24, 256, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mombj"]
+atlas = ExtResource("3_lces5")
+region = Rect2(24, 160, 24, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_vm2e2"]
 atlas = ExtResource("3_lces5")
 region = Rect2(0, 0, 24, 32)
@@ -279,6 +313,38 @@ region = Rect2(24, 64, 24, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_0tujq"]
 atlas = ExtResource("3_lces5")
 region = Rect2(24, 96, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ylbfi"]
+atlas = ExtResource("3_lces5")
+region = Rect2(0, 32, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yvdyc"]
+atlas = ExtResource("3_lces5")
+region = Rect2(0, 0, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7u6je"]
+atlas = ExtResource("3_lces5")
+region = Rect2(48, 32, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w6qyv"]
+atlas = ExtResource("3_lces5")
+region = Rect2(48, 0, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_scg3r"]
+atlas = ExtResource("3_lces5")
+region = Rect2(72, 32, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j021l"]
+atlas = ExtResource("3_lces5")
+region = Rect2(72, 0, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_08jhw"]
+atlas = ExtResource("3_lces5")
+region = Rect2(24, 32, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6fng8"]
+atlas = ExtResource("3_lces5")
+region = Rect2(24, 0, 24, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k835w"]
 atlas = ExtResource("2_b7oxf")
@@ -692,6 +758,50 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_7r60m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8msif")
+}],
+"loop": false,
+"name": &"bike_acro_wheelie_turn_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k82hw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w6ot3")
+}],
+"loop": false,
+"name": &"bike_acro_wheelie_turn_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fj4fy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ydxs")
+}],
+"loop": false,
+"name": &"bike_acro_wheelie_turn_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eje2e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mombj")
+}],
+"loop": false,
+"name": &"bike_acro_wheelie_turn_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_vm2e2")
 }],
 "loop": true,
@@ -792,6 +902,50 @@ animations = [{
 "loop": true,
 "name": &"bike_mach_ride_up",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ylbfi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yvdyc")
+}],
+"loop": false,
+"name": &"bike_turn_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7u6je")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w6qyv")
+}],
+"loop": false,
+"name": &"bike_turn_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_scg3r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j021l")
+}],
+"loop": false,
+"name": &"bike_turn_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_08jhw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6fng8")
+}],
+"loop": false,
+"name": &"bike_turn_up",
+"speed": 5.0
 }, {
 "frames": [],
 "loop": true,
@@ -1117,21 +1271,28 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeRide" type="Node" parent="StateMachine" index="5" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeTurn" type="Node" parent="StateMachine" index="5" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+script = ExtResource("10_wi6i7")
+Controller = NodePath("../../CharacterController")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="BikeRide" type="Node" parent="StateMachine" index="6" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
 script = ExtResource("10_o3xhh")
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeRideMach" type="Node" parent="StateMachine" index="6" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeRideMach" type="Node" parent="StateMachine" index="7" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
 script = ExtResource("11_omv6f")
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStartWheelieIdle" type="Node" parent="StateMachine" index="7" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+[node name="BikeStartWheelieIdle" type="Node" parent="StateMachine" index="8" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
 script = ExtResource("12_omv6f")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
@@ -1139,7 +1300,7 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStartWheelieRide" type="Node" parent="StateMachine" index="8" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+[node name="BikeStartWheelieRide" type="Node" parent="StateMachine" index="9" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
 script = ExtResource("13_yr7ad")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
@@ -1147,7 +1308,7 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStopWheelieIdle" type="Node" parent="StateMachine" index="9" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+[node name="BikeStopWheelieIdle" type="Node" parent="StateMachine" index="10" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
 script = ExtResource("14_yr7ad")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
@@ -1155,7 +1316,7 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStopWheelieRide" type="Node" parent="StateMachine" index="10" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+[node name="BikeStopWheelieRide" type="Node" parent="StateMachine" index="11" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
 script = ExtResource("15_7n5xd")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
@@ -1163,15 +1324,22 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieIdle" type="Node" parent="StateMachine" index="11" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeWheelieIdle" type="Node" parent="StateMachine" index="12" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
 script = ExtResource("14_wi6i7")
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieRide" type="Node" parent="StateMachine" index="12" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeWheelieRide" type="Node" parent="StateMachine" index="13" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
 script = ExtResource("15_o3xhh")
+Controller = NodePath("../../CharacterController")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="BikeWheelieTurn" type="Node" parent="StateMachine" index="14" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+script = ExtResource("19_a7kqq")
 Controller = NodePath("../../CharacterController")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
@@ -1186,7 +1354,7 @@ StateMachine = NodePath("../StateMachine")
 texture_filter = 1
 position = Vector2(8, 4)
 sprite_frames = SubResource("SpriteFrames_db84v")
-animation = &"bike_acro_wheelie_start_up"
+animation = &"bike_acro_wheelie_turn_up"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Animation" index="1"]
 root_node = NodePath("")

@@ -13,6 +13,11 @@ public partial class Run : CharacterState
 		ProcessPress(delta);
 	}
 	
+	public override void SetUp(CharacterState state)
+	{
+		TargetPosition = state.TargetPosition;
+	}
+	
 	public override void Move(double delta)
 	{
 		delta *= Globals.Instance.TileSize * Globals.Instance.RunningSpeed;
@@ -63,6 +68,7 @@ public partial class Run : CharacterState
 			if (!Input.IsActionPressed("ui_cancel"))
 			{
 				Machine.TransitionToState("Walk");
+				Machine.GetCurrentState<Walk>().SetUp(this);
 			}
 			else
 			{

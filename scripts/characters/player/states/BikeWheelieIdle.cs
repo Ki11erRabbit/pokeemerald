@@ -45,6 +45,11 @@ public partial class BikeWheelieIdle : CharacterState
 			{
 				Machine.TransitionToState("BikeWheelieRide");
 			}
+			else
+			{
+				Machine.TransitionToState("BikeWheelieTurn");
+				Machine.GetCurrentState<CharacterState>().SetUp(this);
+			}
 			_holdTime = 0.0f;
 		}
 

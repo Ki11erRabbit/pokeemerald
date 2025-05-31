@@ -17,7 +17,13 @@ public partial class BikeRide : CharacterState
 	{
 		TargetPosition = state.TargetPosition;
 	}
-	
+
+	public override void ExitState()
+	{
+		base.ExitState();
+		_speedUpTime = 0;
+	}
+
 	public override void Move(double delta)
 	{
 		delta *= Globals.Instance.TileSize * Globals.Instance.AcroCyclingSpeed;
@@ -79,9 +85,11 @@ public partial class BikeRide : CharacterState
 				}
 			}
 
-			if (_speedUpTime > SpeedUpThreshold && !GameState.GameState.RidingAcroBike())
+			if (_speedUpTime > SpeedUpThreshold && !GameState.GameState.RidingAcroBike() && GameState.GameState.Instance.RidingBike)
 			{
 				Machine.TransitionToState("BikeRideMach");
+				Machine.GetCurrentState<BikeStartWheelieRide>().SetUp(this);
+				_speedUpTime = 0;
 			}
 			else if (AtTargetPosition())
 			{

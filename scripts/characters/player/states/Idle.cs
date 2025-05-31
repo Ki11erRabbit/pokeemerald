@@ -62,23 +62,74 @@ public partial class Idle : CharacterState
 		{
 			Controller.Direction = Vector2.Up;
 			Controller.TargetPosition = new Vector2(0, -16);
+			if (Input.IsActionJustPressed("ui_up"))
+			{
+				if (lastDirection.IsEqualApprox(Controller.Direction))
+				{
+					Debug.Log($"Vectors are the same: {lastDirection} {Controller.Direction}");
+					_sameDirection = true;
+				}
+				else
+				{
+					Debug.Log($"Vectors are not the same: {lastDirection} {Controller.Direction}");
+					_sameDirection = false;
+				}
+			}
 		}
 		else if (Input.IsActionPressed("ui_down"))
 		{
 			Controller.Direction = Vector2.Down;
 			Controller.TargetPosition = new Vector2(0, 16);
+			if (Input.IsActionJustPressed("ui_down"))
+			{
+				if (lastDirection.IsEqualApprox(Controller.Direction))
+				{
+					Debug.Log($"Vectors are the same: {lastDirection} {Controller.Direction}");
+					_sameDirection = true;
+				}
+				else
+				{
+					Debug.Log($"Vectors are not the same: {lastDirection} {Controller.Direction}");
+					_sameDirection = false;
+				}
+			}
 		} 
 		if (Input.IsActionPressed("ui_left"))
 		{
 			Controller.Direction = Vector2.Left;
 			Controller.TargetPosition = new Vector2(-16, 0);
+			if (Input.IsActionJustPressed("ui_left"))
+			{
+				if (lastDirection.IsEqualApprox(Controller.Direction))
+				{
+					Debug.Log($"Vectors are the same: {lastDirection} {Controller.Direction}");
+					_sameDirection = true;
+				}
+				else
+				{
+					Debug.Log($"Vectors are not the same: {lastDirection} {Controller.Direction}");
+					_sameDirection = false;
+				}
+			}
 		}
 		else if (Input.IsActionPressed("ui_right"))
 		{
 			Controller.Direction = Vector2.Right;
 			Controller.TargetPosition = new Vector2(16, 0);
+			if (Input.IsActionJustPressed("ui_right"))
+			{
+				if (lastDirection.IsEqualApprox(Controller.Direction))
+				{
+					Debug.Log($"Vectors are the same: {lastDirection} {Controller.Direction}");
+					_sameDirection = true;
+				}
+				else
+				{
+					Debug.Log($"Vectors are not the same: {lastDirection} {Controller.Direction}");
+					_sameDirection = false;
+				}
+			}
 		}
-		if (lastDirection.IsEqualApprox(Controller.Direction)) _sameDirection = true;
 	}
 
 	private void ProcessPress(double delta)
@@ -125,11 +176,6 @@ public partial class Idle : CharacterState
 				{
 					Machine.TransitionToState("Walk");
 				}
-			}
-			else if (_sameDirection)
-			{
-				Machine.TransitionToState("Walk");
-				Machine.GetCurrentState<CharacterState>().SetUp(true);
 			}
 		}
 	}

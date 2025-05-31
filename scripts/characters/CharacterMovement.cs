@@ -205,7 +205,6 @@ public partial class CharacterMovement : Node
         
         if (currentState.AtTargetPosition())
         {
-            Debug.Log("\t\tSnapping to Grid");
             SnapPositionToGrid();
             //currentState.StartIdling();
         }
