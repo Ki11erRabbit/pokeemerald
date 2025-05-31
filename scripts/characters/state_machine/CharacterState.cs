@@ -138,7 +138,7 @@ public abstract partial class CharacterState : State
         return _character.Position.DistanceTo(TargetPosition) < 1f;
     }
     
-    protected void SetDirection()
+    protected virtual void SetDirection()
     {
         if (Input.IsActionPressed("ui_up"))
         {
@@ -149,8 +149,8 @@ public abstract partial class CharacterState : State
         {
             Controller.Direction = Vector2.Down;
             Controller.TargetPosition = new Vector2(0, 16);
-        }
-        else if (Input.IsActionPressed("ui_left"))
+        } 
+        if (Input.IsActionPressed("ui_left"))
         {
             Controller.Direction = Vector2.Left;
             Controller.TargetPosition = new Vector2(-16, 0);
@@ -160,5 +160,10 @@ public abstract partial class CharacterState : State
             Controller.Direction = Vector2.Right;
             Controller.TargetPosition = new Vector2(16, 0);
         }
+    }
+
+    public void SnapToGrid()
+    {
+        TargetPosition = Globals.Instance.SnapToGrid(_character.Position);
     }
 }
