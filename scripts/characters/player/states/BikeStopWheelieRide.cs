@@ -3,31 +3,30 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class BikeStopWheelieRide : CharacterState
+public partial class BikeStopWheelieRide : BikeWheelieTransitionState
 {
-	[Export] public AnimatedSprite2D AnimatedSprite;
-	private bool _shouldProcess = false;
-    public override void _Process(double delta)
+	public override void _Process(double delta)
 	{
 		SetDirection();
+
+		if (CheckForEnd(delta))
+		{
+			if (Input.IsActionPressed("ui_cancel"))
+			{
+				Machine.TransitionToState("BikeWheelieRide");
+				Machine.GetCurrentState<BikeWheelieRide>().SetUp(this);
+			}
+			else
+			{
+				Debug.Log("Going back to bike ride");
+				Machine.TransitionToState("BikeRide");
+				Machine.GetCurrentState<BikeRide>().SetUp(this);
+			}
+			
+			return;
+		}
+		
 		ProcessPress(delta);
-		_shouldProcess = true;
-	}
-    
-	public override void Enter()
-	{
-		_shouldProcess = true;
-	}
-
-	public override void ExitState()
-	{
-		base.ExitState();
-		_shouldProcess = false;
-	}
-
-	public override void CustomReady()
-	{
-		AnimatedSprite.AnimationFinished += AnimationFinished;
 	}
 
 	public override void Move(double delta)
@@ -46,18 +45,7 @@ public partial class BikeStopWheelieRide : CharacterState
 		
 	}
 
-	public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
-	{
-		SetAnimationState([
-			StateMachine.AnimationState.bike_acro_wheelie_start_up, 
-			StateMachine.AnimationState.bike_acro_wheelie_start_left, 
-			StateMachine.AnimationState.bike_acro_wheelie_start_right, 
-			StateMachine.AnimationState.bike_acro_wheelie_start_down
-		]);
-		animatedSprite.PlayBackwards(AnimationState.ToString());
-		return true;
-	}
-	
+
 
 	private void ProcessPress(double delta)
 	{
@@ -72,7 +60,6 @@ public partial class BikeStopWheelieRide : CharacterState
 		
 		if (Input.IsActionJustPressed("ui_accept"))
 		{
-			_shouldProcess = false;
 			Machine.TransitionToState("Idle");
 		}
 		
@@ -85,22 +72,24 @@ public partial class BikeStopWheelieRide : CharacterState
 			}
 		}
 	}
-
-	public void AnimationFinished()
+	
+	protected override void SetEndFrame()
 	{
-		if (CanProcess() && _shouldProcess)
-		{
-			if (Input.IsActionPressed("ui_cancel"))
-			{
-				Machine.TransitionToState("BikeWheelieRide");
-				Machine.GetCurrentState<BikeWheelieRide>().SetUp(this);
-			}
-			else
-			{
-				Debug.Log("Going back to bike ride");
-				Machine.TransitionToState("BikeRide");
-				Machine.GetCurrentState<BikeRide>().SetUp(this);
-			}
-		}
+		SetAnimationState([
+			StateMachine.AnimationState.bike_acro_wheelie_start_up, 
+			StateMachine.AnimationState.bike_acro_wheelie_start_left, 
+			StateMachine.AnimationState.bike_acro_wheelie_start_right, 
+			StateMachine.AnimationState.bike_acro_wheelie_start_down
+		]);
 	}
+	protected override void SetStartFrame()
+	{
+		SetAnimationState([
+			StateMachine.AnimationState.bike_acro_wheelie_end_up, 
+			StateMachine.AnimationState.bike_acro_wheelie_end_left, 
+			StateMachine.AnimationState.bike_acro_wheelie_end_right, 
+			StateMachine.AnimationState.bike_acro_wheelie_end_down
+		]);
+	}
+
 }

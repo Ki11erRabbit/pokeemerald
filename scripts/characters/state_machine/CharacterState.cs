@@ -46,6 +46,10 @@ public enum AnimationState
     bike_acro_wheelie_start_up,
     bike_acro_wheelie_start_left,
     bike_acro_wheelie_start_right,
+    bike_acro_wheelie_end_down,
+    bike_acro_wheelie_end_up,
+    bike_acro_wheelie_end_left,
+    bike_acro_wheelie_end_right,
 }
 
 public abstract partial class CharacterState : State
