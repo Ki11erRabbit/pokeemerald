@@ -92,6 +92,11 @@ public abstract partial class CharacterState : State
         
     }
     
+    public virtual void SetUp(bool _)
+    {
+        
+    }
+    
     public void animate(AnimatedSprite2D animatedSprite)
     {
         Debug.Log("Configuring Animation State");

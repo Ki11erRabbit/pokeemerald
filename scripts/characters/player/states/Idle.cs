@@ -16,6 +16,8 @@ public partial class Idle : CharacterState
 		ProcessPress(delta);
 	}
     
+	
+    
 	public override void Enter()
 	{
 		GameState.GameState.StopRidingBike();
@@ -53,6 +55,31 @@ public partial class Idle : CharacterState
 		return false;
 	}
 	
+	protected override void SetDirection()
+	{
+		var lastDirection = Controller.Direction;
+		if (Input.IsActionPressed("ui_up"))
+		{
+			Controller.Direction = Vector2.Up;
+			Controller.TargetPosition = new Vector2(0, -16);
+		}
+		else if (Input.IsActionPressed("ui_down"))
+		{
+			Controller.Direction = Vector2.Down;
+			Controller.TargetPosition = new Vector2(0, 16);
+		} 
+		if (Input.IsActionPressed("ui_left"))
+		{
+			Controller.Direction = Vector2.Left;
+			Controller.TargetPosition = new Vector2(-16, 0);
+		}
+		else if (Input.IsActionPressed("ui_right"))
+		{
+			Controller.Direction = Vector2.Right;
+			Controller.TargetPosition = new Vector2(16, 0);
+		}
+		if (lastDirection.IsEqualApprox(Controller.Direction)) _sameDirection = true;
+	}
 
 	private void ProcessPress(double delta)
 	{
@@ -62,7 +89,7 @@ public partial class Idle : CharacterState
 			if (_sameDirection)
 			{
 				Machine.TransitionToState("Walk");
-				Machine.GetCurrentState<CharacterState>().SetTargetPosition();
+				Machine.GetCurrentState<CharacterState>().SetUp(true);
 				Debug.Log("Walking via same direction");
 			}
 			else
@@ -86,18 +113,23 @@ public partial class Idle : CharacterState
 
 			if (_holdTime > HoldThreshold)
 			{
-				if (Input.IsActionPressed("ui_cancel"))
+				if (_sameDirection)
+				{
+					Machine.TransitionToState("Walk");
+				}
+				else if (Input.IsActionPressed("ui_cancel"))
 				{
 					Machine.TransitionToState("Run");
-					Machine.GetCurrentState<CharacterState>().SetTargetPosition();
-					Debug.Log("Running via holding down");
 				}
 				else
 				{
 					Machine.TransitionToState("Walk");
-					Machine.GetCurrentState<CharacterState>().SetTargetPosition();
-					Debug.Log("\tWalking via holding down");
 				}
+			}
+			else if (_sameDirection)
+			{
+				Machine.TransitionToState("Walk");
+				Machine.GetCurrentState<CharacterState>().SetUp(true);
 			}
 		}
 	}

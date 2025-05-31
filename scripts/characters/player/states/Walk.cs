@@ -7,6 +7,18 @@ namespace PokeEmerald.Characters.Player.States;
 
 public partial class Walk : CharacterState
 {
+	private bool _tapped = false;
+	public override void SetUp(bool tapped)
+	{
+		_tapped = tapped;
+	}
+
+	public override void ExitState()
+	{
+		base.ExitState();
+		_tapped = false;
+	}
+
 	public override void _Process(double delta)
 	{
 		SetDirection();
@@ -43,6 +55,14 @@ public partial class Walk : CharacterState
 
 	private void ProcessPress(double delta)
 	{
+		if (_tapped)
+		{
+			if (AtTargetPosition())
+			{
+				Machine.TransitionToState("Idle");
+			}
+			return;
+		}
 		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
 		    !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right"))
 		{

@@ -6,25 +6,11 @@ namespace PokeEmerald.Characters.Player.States;
 
 public partial class Run : CharacterState
 {
-    [ExportCategory("Controller")] 
-	[Export]
-	public PlayerController Controller;
-
-	[ExportCategory("Vars")] 
-	[Export] public double HoldThreshold = 0.1f;
-	private bool _sameDirection = false;
-	private double _holdTime = 0;
-	
+    
 	public override void _Process(double delta)
 	{
 		SetDirection();
 		ProcessPress(delta);
-	}
-	
-	public override void ExitState()
-	{
-		_holdTime = 0;
-		_sameDirection = false;
 	}
 	
 	public override void Move(double delta)
@@ -56,11 +42,13 @@ public partial class Run : CharacterState
 
 	private void ProcessPress(double delta)
 	{
-		if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
-		    Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
+		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
+		    !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right"))
 		{
-			
-			_holdTime = 0.0f;
+			if (AtTargetPosition())
+			{
+				Machine.TransitionToState("Idle");
+			}
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
@@ -71,15 +59,14 @@ public partial class Run : CharacterState
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-			_holdTime += delta;
-
-			if (_holdTime > HoldThreshold)
+			
+			if (!Input.IsActionPressed("ui_cancel"))
 			{
-				if (!Input.IsActionPressed("ui_cancel"))
-				{
-					Machine.TransitionToState("Walk");
-				}
-				else
+				Machine.TransitionToState("Walk");
+			}
+			else
+			{
+				if (AtTargetPosition())
 				{
 					EnterState();
 				}
