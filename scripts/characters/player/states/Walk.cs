@@ -11,11 +11,21 @@ public partial class Walk : CharacterState
 	public override void SetUp(bool tapped)
 	{
 		_tapped = tapped;
+		if (Colliding)
+		{
+			ResetTargetPosition();
+			Machine.TransitionToState("Idle");
+		}
 	}
 	
 	public override void SetUp(CharacterState state)
 	{
 		TargetPosition = state.TargetPosition;
+		if (Colliding)
+		{
+			ResetTargetPosition();
+			Machine.TransitionToState("Idle");
+		}
 	}
 
 	public override void ExitState()
@@ -26,16 +36,19 @@ public partial class Walk : CharacterState
 
 	public override void _Process(double delta)
 	{
-		SetDirection();
-		ProcessPress(delta);
+		if (AtTargetPosition())
+		{
+			SetDirection();
+			CheckCollision();
+			ProcessPress(delta);
+		}
 	}
-	
-	public override void Move(double delta)
+
+	public override double GetMovementSpeed()
 	{
-		delta *= Globals.Instance.TileSize * Globals.Instance.WalkingSpeed;
-		Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
+		return Globals.Instance.WalkingSpeed;
 	}
-	
+
 	public override bool IsMoving()
 	{
 		return true;
@@ -56,16 +69,12 @@ public partial class Walk : CharacterState
 		]);
 		return false;
 	}
-
-
+	
 	private void ProcessPress(double delta)
 	{
 		if (_tapped)
 		{
-			if (AtTargetPosition())
-			{
-				Machine.TransitionToState("Idle");
-			}
+			Machine.TransitionToState("Idle");
 			return;
 		}
 		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
@@ -82,21 +91,57 @@ public partial class Walk : CharacterState
 			Machine.TransitionToState("BikeIdle");
 		}
 		
-		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
-		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
+		if ((Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
+		     Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right")))
 		{
 			
 			if (Input.IsActionPressed("ui_cancel"))
 			{
-				Machine.TransitionToState("Run");
-				Machine.GetCurrentState<Walk>().SetUp(this);
+				if (!Colliding)
+				{
+					Machine.TransitionToState("Run");
+					Machine.GetCurrentState<Run>().SetUp(this);
+				}
+				else
+				{
+					Machine.TransitionToState("Idle");
+					Machine.GetCurrentState<CharacterState>().ResetTargetPosition();
+				}
+
+				return;
 			}
-			
-			if (AtTargetPosition())
+
+			if (!Colliding)
 			{
 				EnterState();
 			}
 		}
 	}
 	
+	private class Tapped : IReachedTargetPosition
+	{
+		public void Colliding(CharacterState self)
+		{
+			self.ResetTargetPosition();
+			self.Machine.TransitionToState("Idle");
+		}
+
+		public void NotColliding(CharacterState self)
+		{
+			self.Machine.TransitionToState("Idle");
+		}
+	}
+	
+	private class HeldDown : IReachedTargetPosition
+	{
+		public void Colliding(CharacterState self)
+		{
+			self.EnterState();
+		}
+
+		public void NotColliding(CharacterState self)
+		{
+			self.ResetTargetPosition();
+		}
+	}
 }

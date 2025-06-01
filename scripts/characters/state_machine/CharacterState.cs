@@ -65,18 +65,23 @@ public abstract partial class CharacterState : State
     [ExportCategory("Nodes")] 
     [Export]
     public CharacterController Controller;
+    [Export] public CharacterCollisonRayCast RayCast;
     [Export] public CharacterAnimation Animation;
     [ExportCategory("Vars")] 
     [Export] public Vector2 TargetPosition;
+    [Export] public Vector2 StartPosition;
+    protected bool Colliding = false;
     public AnimationState AnimationState { get; set; } = AnimationState.idle_down;
     protected AnimationState PreviousAnimation;
     protected Character Character;
 
     public override void EnterState()
     {
+        StartPosition = Character.Position;
         Animation.PlayAnimation();
         SetTargetPosition();
         Enter();
+        RayCast.Collision += SetColliding;
     }
 
     public virtual void Enter()
@@ -93,6 +98,11 @@ public abstract partial class CharacterState : State
     public virtual void CustomReady()
     {
         
+    }
+    
+    public void SetColliding(bool colliding, GodotObject collider)
+    {
+        Colliding = colliding;
     }
     
     public virtual void SetUp(CharacterState _)
@@ -134,8 +144,20 @@ public abstract partial class CharacterState : State
             AnimationState = possibleStates[3];
         }
     }
+    
+    public abstract double GetMovementSpeed();
 
-    public abstract void Move(double delta);
+    public virtual void Move(double delta)
+    {
+        CheckCollision();
+        if (Colliding && AtStartPosition())
+        {
+            ResetTargetPosition();
+            return;
+        }
+        delta *= Globals.Instance.TileSize * GetMovementSpeed();
+        Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
+    }
 
     public abstract bool IsMoving();
 
@@ -143,12 +165,23 @@ public abstract partial class CharacterState : State
 
     public void SetTargetPosition()
     {
+        StartPosition = Character.Position;
         TargetPosition = Character.Position + Controller.Direction * Globals.Instance.TileSize;
+    }
+
+    public void ResetTargetPosition()
+    {
+        TargetPosition = Character.Position;
     }
 
     public bool AtTargetPosition()
     {
         return Character.Position.DistanceTo(TargetPosition) < 0.3f;
+    }
+
+    public bool AtStartPosition()
+    {
+        return Character.Position.IsEqualApprox(StartPosition);
     }
     
     protected virtual void SetDirection()
@@ -173,10 +206,35 @@ public abstract partial class CharacterState : State
             Controller.Direction = Vector2.Right;
             Controller.TargetPosition = new Vector2(16, 0);
         }
+        CheckCollision();
+    }
+
+    protected void CheckCollision()
+    {
+        RayCast.TargetPosition = Controller.TargetPosition;
+        RayCast.CheckCollision();
     }
 
     public void SnapToGrid()
     {
         TargetPosition = Globals.Instance.SnapToGrid(Character.Position);
+    }
+    
+    protected virtual void CheckForPositionAndCollison(IReachedTargetPosition method)
+    {
+        if (AtTargetPosition() && !Colliding)
+        {
+            method.Colliding(this);
+        }
+        else if (AtTargetPosition() && Colliding)
+        {
+            method.NotColliding(this);
+        }
+    }
+    
+    protected interface IReachedTargetPosition
+    {
+        public void Colliding(CharacterState self);
+        public void NotColliding(CharacterState self);
     }
 }

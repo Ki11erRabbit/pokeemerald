@@ -6,7 +6,7 @@ namespace PokeEmerald.Characters.Player.States;
 
 public partial class Run : CharacterState
 {
-    
+
 	public override void _Process(double delta)
 	{
 		SetDirection();
@@ -17,11 +17,9 @@ public partial class Run : CharacterState
 	{
 		TargetPosition = state.TargetPosition;
 	}
-	
-	public override void Move(double delta)
+	public override double GetMovementSpeed()
 	{
-		delta *= Globals.Instance.TileSize * Globals.Instance.RunningSpeed;
-		Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
+		return Globals.Instance.RunningSpeed;
 	}
 
 	public override bool IsMoving()
@@ -61,22 +59,56 @@ public partial class Run : CharacterState
 			Machine.TransitionToState("BikeIdle");
 		}
 		
-		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
-		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
+		if ((Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
+		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right")) && !Colliding)
 		{
 			
 			if (!Input.IsActionPressed("ui_cancel"))
 			{
-				Machine.TransitionToState("Walk");
-				Machine.GetCurrentState<Walk>().SetUp(this);
+				if (!Colliding)
+				{
+					Machine.TransitionToState("Walk");
+					var walk = Machine.GetCurrentState<Walk>();
+					walk.SetUp(this);
+				}
+				else
+				{
+					Machine.TransitionToState("Idle");
+					Machine.GetCurrentState<CharacterState>().ResetTargetPosition();
+				}
 			}
 			else
 			{
-				if (AtTargetPosition())
-				{
-					EnterState();
-				}
+				CheckForPositionAndCollison(new HeldDown());
 			}
+		}
+	}
+	
+	private class Tapped : IReachedTargetPosition
+	{
+		public void Colliding(CharacterState self)
+		{
+			self.ResetTargetPosition();
+			self.Machine.TransitionToState("Idle");
+		}
+
+		public void NotColliding(CharacterState self)
+		{
+			self.Machine.TransitionToState("Idle");
+		}
+	}
+	
+	private class HeldDown : IReachedTargetPosition
+	{
+		public void Colliding(CharacterState self)
+		{
+			self.EnterState();
+		}
+
+		public void NotColliding(CharacterState self)
+		{
+			self.Machine.TransitionToState("Idle");
+			self.Machine.GetCurrentState<CharacterState>().ResetTargetPosition();
 		}
 	}
 }

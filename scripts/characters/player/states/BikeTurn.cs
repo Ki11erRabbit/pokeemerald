@@ -11,9 +11,10 @@ public partial class BikeTurn : CharacterState
     {
         Machine.ChangeState(_previousState);
     }
-    public override void Move(double delta)
+    
+    public override double GetMovementSpeed()
     {
-        
+        return 0;
     }
     
     public override bool IsMoving()

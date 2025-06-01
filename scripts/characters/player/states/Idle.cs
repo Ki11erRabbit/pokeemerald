@@ -29,9 +29,9 @@ public partial class Idle : CharacterState
 		_sameDirection = false;
 	}
 
-	public override void Move(double delta)
+	public override double GetMovementSpeed()
 	{
-		
+		return 0;
 	}
 
 	public override void StartIdling()
@@ -140,14 +140,19 @@ public partial class Idle : CharacterState
 			if (_sameDirection)
 			{
 				Machine.TransitionToState("Walk");
-				Machine.GetCurrentState<CharacterState>().SetUp(true);
-				Debug.Log("Walking via same direction");
+				if (!Colliding)
+				{
+					Machine.GetCurrentState<CharacterState>().SetUp(true);
+				}
+				else
+				{
+					Machine.GetCurrentState<CharacterState>().ResetTargetPosition();
+				}
 			}
 			else
 			{
 				Machine.TransitionToState("Turn");
 				Machine.GetCurrentState<Turn>().SetUp(this);
-				Debug.Log("Turning");
 			}
 			_holdTime = 0.0f;
 		}
@@ -166,15 +171,39 @@ public partial class Idle : CharacterState
 			{
 				if (_sameDirection)
 				{
-					Machine.TransitionToState("Walk");
+					if (!Colliding)
+					{
+						Machine.TransitionToState("Walk");
+					}
+					else
+					{
+						Machine.TransitionToState("Walk");
+						Machine.GetCurrentState<CharacterState>().ResetTargetPosition();
+					}
 				}
 				else if (Input.IsActionPressed("ui_cancel"))
 				{
-					Machine.TransitionToState("Run");
+					if (!Colliding)
+					{
+						Machine.TransitionToState("Run");
+					}
+					else
+					{
+						Machine.TransitionToState("Walk");
+						Machine.GetCurrentState<CharacterState>().ResetTargetPosition();
+					}
 				}
 				else
 				{
-					Machine.TransitionToState("Walk");
+					if (!Colliding)
+					{
+						Machine.TransitionToState("Walk");
+					}
+					else
+					{
+						Machine.TransitionToState("Walk");
+						Machine.GetCurrentState<CharacterState>().ResetTargetPosition();
+					}
 				}
 			}
 		}

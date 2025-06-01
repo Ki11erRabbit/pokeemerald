@@ -14,10 +14,10 @@ public partial class BikeIdle : CharacterState
 		GameState.GameState.RideBike();
 	}
 
-	public override void Move(double delta)
-    {
-        
-    }
+	public override double GetMovementSpeed()
+	{
+		return 0;
+	}
 
     public override bool IsMoving()
     {

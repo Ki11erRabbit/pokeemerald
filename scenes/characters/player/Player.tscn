@@ -1259,134 +1259,154 @@ Movement = NodePath("../Movement")
 script = ExtResource("6_k835w")
 User = NodePath("..")
 
-[node name="Walk" type="Node" parent="StateMachine" index="0" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="Walk" type="Node" parent="StateMachine" index="0" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("5_imd1d")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="Idle" type="Node" parent="StateMachine" index="1" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="Idle" type="Node" parent="StateMachine" index="1" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("6_5edqu")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="Run" type="Node" parent="StateMachine" index="2" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="Run" type="Node" parent="StateMachine" index="2" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("7_wwjds")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="Turn" type="Node" parent="StateMachine" index="3" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="Turn" type="Node" parent="StateMachine" index="3" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("8_jevs6")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeIdle" type="Node" parent="StateMachine" index="4" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeIdle" type="Node" parent="StateMachine" index="4" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("9_7onrl")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeTurn" type="Node" parent="StateMachine" index="5" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeTurn" type="Node" parent="StateMachine" index="5" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("10_wi6i7")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeRide" type="Node" parent="StateMachine" index="6" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeRide" type="Node" parent="StateMachine" index="6" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("10_o3xhh")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeRideMach" type="Node" parent="StateMachine" index="7" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeRideMach" type="Node" parent="StateMachine" index="7" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("11_omv6f")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStartWheelieIdle" type="Node" parent="StateMachine" index="8" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+[node name="BikeStartWheelieIdle" type="Node" parent="StateMachine" index="8" node_paths=PackedStringArray("AnimatedSprite", "Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("12_omv6f")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStartWheelieRide" type="Node" parent="StateMachine" index="9" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+[node name="BikeStartWheelieRide" type="Node" parent="StateMachine" index="9" node_paths=PackedStringArray("AnimatedSprite", "Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("13_yr7ad")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStopWheelieIdle" type="Node" parent="StateMachine" index="10" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+[node name="BikeStopWheelieIdle" type="Node" parent="StateMachine" index="10" node_paths=PackedStringArray("AnimatedSprite", "Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("14_yr7ad")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeStopWheelieRide" type="Node" parent="StateMachine" index="11" node_paths=PackedStringArray("AnimatedSprite", "Controller", "Animation", "User", "Machine")]
+[node name="BikeStopWheelieRide" type="Node" parent="StateMachine" index="11" node_paths=PackedStringArray("AnimatedSprite", "Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("15_7n5xd")
 AnimatedSprite = NodePath("../../Animation/Animation")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieIdle" type="Node" parent="StateMachine" index="12" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeWheelieIdle" type="Node" parent="StateMachine" index="12" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("14_wi6i7")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieRide" type="Node" parent="StateMachine" index="13" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeWheelieRide" type="Node" parent="StateMachine" index="13" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("15_o3xhh")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieTurn" type="Node" parent="StateMachine" index="14" node_paths=PackedStringArray("Controller", "Animation", "User", "Machine")]
+[node name="BikeWheelieTurn" type="Node" parent="StateMachine" index="14" node_paths=PackedStringArray("Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("19_a7kqq")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieBounceIdle" type="Node" parent="StateMachine" index="15" node_paths=PackedStringArray("AnimationPlayer", "Shadow", "Dust", "Controller", "Animation", "User", "Machine")]
+[node name="BikeWheelieBounceIdle" type="Node" parent="StateMachine" index="15" node_paths=PackedStringArray("AnimationPlayer", "Shadow", "Dust", "Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("20_02lei")
 AnimationPlayer = NodePath("../../Animation/AnimationPlayer")
 Shadow = NodePath("../../Animation/Shadow")
 Dust = NodePath("../../Animation/Particles")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieBounceRide" type="Node" parent="StateMachine" index="16" node_paths=PackedStringArray("AnimationPlayer", "Shadow", "Dust", "Controller", "Animation", "User", "Machine")]
+[node name="BikeWheelieBounceRide" type="Node" parent="StateMachine" index="16" node_paths=PackedStringArray("AnimationPlayer", "Shadow", "Dust", "Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("21_jb2jc")
 AnimationPlayer = NodePath("../../Animation/AnimationPlayer")
 Shadow = NodePath("../../Animation/Shadow")
 Dust = NodePath("../../Animation/Particles")
 Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
+
+[node name="CollisonRayCast" parent="." index="5" node_paths=PackedStringArray("CharacterController")]
+CharacterController = NodePath("../CharacterController")
 
 [node name="Animation" parent="." index="6" node_paths=PackedStringArray("CharacterController", "AnimatedSprite", "StateMachine")]
 CharacterController = NodePath("../CharacterController")

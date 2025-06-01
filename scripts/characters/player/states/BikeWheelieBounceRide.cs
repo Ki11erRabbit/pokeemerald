@@ -50,10 +50,9 @@ public partial class BikeWheelieBounceRide : CharacterState
         return true;
     }
 
-    public override void Move(double delta)
+    public override double GetMovementSpeed()
     {
-        delta *= Globals.Instance.TileSize * Globals.Instance.AcroCyclingWheelieSpeed;
-        Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
+        return Globals.Instance.AcroCyclingWheelieSpeed;
     }
 
     public override void StartIdling()

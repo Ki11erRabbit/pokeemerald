@@ -6,11 +6,11 @@ namespace PokeEmerald.Characters.Player.States;
 public partial class BikeWheelieRide : CharacterState
 {
 	private bool _sameDirection = false;
-    public override void Move(double delta)
-    {
-	    delta *= Globals.Instance.TileSize * Globals.Instance.AcroCyclingWheelieSpeed;
-	    Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
-    }
+	
+	public override double GetMovementSpeed()
+	{
+		return Globals.Instance.AcroCyclingWheelieSpeed;
+	}
 
     public override void SetUp(CharacterState state)
     {

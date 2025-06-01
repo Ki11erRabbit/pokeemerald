@@ -51,9 +51,9 @@ public partial class BikeWheelieBounceIdle : CharacterState
         return false;
     }
 
-    public override void Move(double delta)
+    public override double GetMovementSpeed()
     {
-        
+        return 0;
     }
 
     public override void StartIdling()

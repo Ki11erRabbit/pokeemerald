@@ -10,10 +10,10 @@ public partial class BikeWheelieIdle : CharacterState
 	private bool _sameDirection = false;
 	private double _holdTime = 0.0;
 	private double _bounceHoldTime = 0.0;
-    public override void Move(double delta)
-    {
-        
-    }
+	public override double GetMovementSpeed()
+	{
+		return 0;
+	}
 
     public override bool IsMoving()
     {

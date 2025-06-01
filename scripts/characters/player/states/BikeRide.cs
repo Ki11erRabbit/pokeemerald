@@ -23,11 +23,9 @@ public partial class BikeRide : CharacterState
 		base.ExitState();
 		_speedUpTime = 0;
 	}
-
-	public override void Move(double delta)
+	public override double GetMovementSpeed()
 	{
-		delta *= Globals.Instance.TileSize * Globals.Instance.AcroCyclingSpeed;
-		Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
+		return Globals.Instance.AcroCyclingSpeed;
 	}
 	
 	public override bool IsMoving()
