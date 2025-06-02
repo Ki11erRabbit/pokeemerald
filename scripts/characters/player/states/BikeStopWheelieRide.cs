@@ -26,7 +26,7 @@ public partial class BikeStopWheelieRide : BikeWheelieTransitionState
 	
 	public override double GetMovementSpeed()
 	{
-		return Globals.Instance.AcroCyclingWheelieSpeed;
+		return Globals.Instance.WalkingSpeed;
 	}
 	
 	public override bool IsMoving()

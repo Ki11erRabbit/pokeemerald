@@ -45,15 +45,19 @@ public partial class BikeWheelieIdle : CharacterState
     {
         
     }
+    
+    
 
     public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
     {
-        SetAnimationState([
-            StateMachine.AnimationState.bike_acro_wheelie_idle_up, 
-            StateMachine.AnimationState.bike_acro_wheelie_idle_left, 
-            StateMachine.AnimationState.bike_acro_wheelie_idle_right, 
-            StateMachine.AnimationState.bike_acro_wheelie_idle_down
-        ]);
+	    SetAnimationState([
+		    StateMachine.AnimationState.bike_acro_wheelie_idle_up, 
+		    StateMachine.AnimationState.bike_acro_wheelie_idle_left, 
+		    StateMachine.AnimationState.bike_acro_wheelie_idle_right, 
+		    StateMachine.AnimationState.bike_acro_wheelie_idle_down
+	    ]);
+	    
+        
         return false;
     }
     
@@ -213,6 +217,7 @@ public partial class BikeWheelieIdle : CharacterState
 		{
 			Machine.TransitionToState("Idle");
 		}
+		
 		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))

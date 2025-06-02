@@ -1,4 +1,4 @@
-[gd_scene load_steps=157 format=3 uid="uid://didjjlyomyes2"]
+[gd_scene load_steps=174 format=3 uid="uid://didjjlyomyes2"]
 
 [ext_resource type="PackedScene" uid="uid://bus3gc6sk80pf" path="res://scenes/characters/Character.tscn" id="1_db84v"]
 [ext_resource type="Texture2D" uid="uid://4holuep1sky7" path="res://assets/player/brendon.png" id="2_b7oxf"]
@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://pnottdvht4pv" path="res://scripts/characters/player/states/BikeWheelieTurn.cs" id="19_a7kqq"]
 [ext_resource type="Script" uid="uid://d34xsanh201uy" path="res://scripts/characters/player/states/BikeWheelieBounceIdle.cs" id="20_02lei"]
 [ext_resource type="Script" uid="uid://d3fju3r5tsb1g" path="res://scripts/characters/player/states/BikeWheelieBounceRide.cs" id="21_jb2jc"]
+[ext_resource type="Script" uid="uid://ci70jmlpa5ht2" path="res://scripts/characters/player/states/BikeSideHop.cs" id="22_b0u6j"]
 [ext_resource type="Texture2D" uid="uid://cptig8s3opqog" path="res://assets/player/shadow.png" id="24_jb2jc"]
 [ext_resource type="Texture2D" uid="uid://g4f4ab1v7oul" path="res://assets/effects/jump_dust.png" id="25_cskv4"]
 
@@ -89,6 +90,70 @@ region = Rect2(32, 64, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ngp4q"]
 atlas = ExtResource("3_lces5")
 region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vh124"]
+atlas = ExtResource("3_lces5")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oph55"]
+atlas = ExtResource("3_lces5")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n6uul"]
+atlas = ExtResource("3_lces5")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6arh3"]
+atlas = ExtResource("3_lces5")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lanxa"]
+atlas = ExtResource("3_lces5")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_emmpq"]
+atlas = ExtResource("3_lces5")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_urkv0"]
+atlas = ExtResource("3_lces5")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a3iqx"]
+atlas = ExtResource("3_lces5")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5bkc0"]
+atlas = ExtResource("3_lces5")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y2xvd"]
+atlas = ExtResource("3_lces5")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtojy"]
+atlas = ExtResource("3_lces5")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ga1u3"]
+atlas = ExtResource("3_lces5")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ucd7g"]
+atlas = ExtResource("3_lces5")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nsh5c"]
+atlas = ExtResource("3_lces5")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uitl3"]
+atlas = ExtResource("3_lces5")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sbj1w"]
+atlas = ExtResource("3_lces5")
+region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mcws0"]
 atlas = ExtResource("3_lces5")
@@ -591,6 +656,94 @@ animations = [{
 "loop": true,
 "name": &"bike_acro_ride_up",
 "speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vh124")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oph55")
+}],
+"loop": false,
+"name": &"bike_acro_side_hop_down_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n6uul")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6arh3")
+}],
+"loop": false,
+"name": &"bike_acro_side_hop_down_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lanxa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_emmpq")
+}],
+"loop": false,
+"name": &"bike_acro_side_hop_left_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_urkv0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a3iqx")
+}],
+"loop": false,
+"name": &"bike_acro_side_hop_left_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5bkc0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y2xvd")
+}],
+"loop": false,
+"name": &"bike_acro_side_hop_right_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dtojy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ga1u3")
+}],
+"loop": false,
+"name": &"bike_acro_side_hop_right_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ucd7g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nsh5c")
+}],
+"loop": false,
+"name": &"bike_acro_side_hop_up_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uitl3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sbj1w")
+}],
+"loop": false,
+"name": &"bike_acro_side_hop_up_right",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1405,6 +1558,17 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
+[node name="BikeSideHop" type="Node" parent="StateMachine" index="17" node_paths=PackedStringArray("AnimationPlayer", "Shadow", "Dust", "Controller", "RayCast", "Animation", "User", "Machine")]
+script = ExtResource("22_b0u6j")
+AnimationPlayer = NodePath("../../Animation/AnimationPlayer")
+Shadow = NodePath("../../Animation/Shadow")
+Dust = NodePath("../../Animation/Particles")
+Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
 [node name="CollisonRayCast" parent="." index="5" node_paths=PackedStringArray("CharacterController")]
 CharacterController = NodePath("../CharacterController")
 
@@ -1423,7 +1587,9 @@ texture = ExtResource("24_jb2jc")
 texture_filter = 1
 position = Vector2(8, 4)
 sprite_frames = SubResource("SpriteFrames_db84v")
-animation = &"bike_acro_ride_right"
+animation = &"bike_acro_side_hop_up_right"
+frame = 1
+frame_progress = 1.0
 
 [node name="Particles" type="AnimatedSprite2D" parent="Animation" index="2"]
 visible = false

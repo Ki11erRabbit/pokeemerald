@@ -8,11 +8,37 @@ public partial class BikeIdle : CharacterState
 	[Export] public double HoldThreshold = 0.1;
 	private bool _sameDirection = false;
 	private double _holdTime = 0.0;
+	private Vector2 _facingDirection;
+	private bool _shouldJump = false;
+	private Vector2 _lastDirection;
+
+	public override void _Process(double delta)
+	{
+		if (AtTargetPosition() || AtStartPosition())
+		{
+			SetDirection();
+			CheckCollision();
+			ProcessPress(delta);
+		}
+		ProcessBPress(delta);
+	}
+
+	public override void SetUp(Vector2 direction)
+	{
+		Controller.Direction = direction;
+		_facingDirection = Vector2.Zero;
+	}
 
 	public override void EnterState()
 	{
 		base.EnterState();
 		GameState.GameState.RideBike();
+	}
+
+	public override void ExitState()
+	{
+		base.ExitState();
+		_facingDirection = Vector2.Zero;
 	}
 
 	public override double GetMovementSpeed()
@@ -32,31 +58,96 @@ public partial class BikeIdle : CharacterState
 
     public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
     {
-        SetAnimationState([
-            StateMachine.AnimationState.bike_idle_up, 
-            StateMachine.AnimationState.bike_idle_left, 
-            StateMachine.AnimationState.bike_idle_right, 
-            StateMachine.AnimationState.bike_idle_down
-        ]);
+
+        if (_facingDirection == Vector2.Zero)
+        {
+	        SetAnimationState([
+		        StateMachine.AnimationState.bike_idle_up, 
+		        StateMachine.AnimationState.bike_idle_left, 
+		        StateMachine.AnimationState.bike_idle_right, 
+		        StateMachine.AnimationState.bike_idle_down
+	        ]);
+        }
+        else
+        {
+	        if (_facingDirection == Vector2.Up)
+	        {
+		        if (Controller.Direction == Vector2.Left)
+		        {
+			        AnimationState = AnimationState.bike_idle_up;
+		        }
+		        else if (Controller.Direction == Vector2.Right)
+		        {
+			        AnimationState = AnimationState.bike_idle_up;
+		        }
+			    
+	        }
+	        else if (_facingDirection == Vector2.Left)
+	        {
+		        if (Controller.Direction == Vector2.Up)
+		        {
+			        AnimationState = AnimationState.bike_idle_left;
+		        }
+		        else if (Controller.Direction == Vector2.Down)
+		        {
+			        AnimationState = AnimationState.bike_idle_left;
+		        }
+	        }
+	        else if (_facingDirection == Vector2.Right)
+	        {
+		        if (Controller.Direction == Vector2.Up)
+		        {
+			        AnimationState = AnimationState.bike_idle_right;
+		        }
+		        else if (Controller.Direction == Vector2.Down)
+		        {
+			        AnimationState = AnimationState.bike_idle_right;
+		        }
+	        }
+	        else if (_facingDirection == Vector2.Down)
+	        {
+		        if (Controller.Direction == Vector2.Left)
+		        {
+			        AnimationState = AnimationState.bike_idle_down;
+		        }
+		        else if (Controller.Direction == Vector2.Right)
+		        {
+			        AnimationState = AnimationState.bike_idle_down;
+		        }
+	        }
+        }
+        
         return false;
     }
     
     protected override void SetDirection()
     {
-	    var lastDirection = Controller.Direction;
+	    _lastDirection = Controller.Direction;
 		if (Input.IsActionPressed("ui_up"))
 		{
 			Controller.Direction = Vector2.Up;
 			Controller.TargetPosition = new Vector2(0, -16);
 			if (Input.IsActionJustPressed("ui_up"))
 			{
-				if (lastDirection.IsEqualApprox(Controller.Direction))
+				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
 					_sameDirection = true;
 				}
 				else
 				{
 					_sameDirection = false;
+				}
+			}
+			if (_lastDirection.IsEqualApprox(Vector2.Right) || _lastDirection.IsEqualApprox(Vector2.Left))
+			{
+				if (Input.IsActionJustPressed("ui_cancel"))
+				{
+					_facingDirection = _lastDirection;
+					_shouldJump = true;
+				}
+				else
+				{
+					_facingDirection = Vector2.Zero;
 				}
 			}
 		}
@@ -66,13 +157,26 @@ public partial class BikeIdle : CharacterState
 			Controller.TargetPosition = new Vector2(0, 16);
 			if (Input.IsActionJustPressed("ui_down"))
 			{
-				if (lastDirection.IsEqualApprox(Controller.Direction))
+				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
 					_sameDirection = true;
 				}
 				else
 				{
 					_sameDirection = false;
+				}
+			}
+			
+			if (_lastDirection.IsEqualApprox(Vector2.Left) || _lastDirection.IsEqualApprox(Vector2.Right))
+			{
+				if (Input.IsActionJustPressed("ui_cancel"))
+				{
+					_facingDirection = _lastDirection;
+					_shouldJump = true;
+				}
+				else
+				{
+					_facingDirection = Vector2.Zero;
 				}
 			}
 		} 
@@ -82,13 +186,26 @@ public partial class BikeIdle : CharacterState
 			Controller.TargetPosition = new Vector2(-16, 0);
 			if (Input.IsActionJustPressed("ui_left"))
 			{
-				if (lastDirection.IsEqualApprox(Controller.Direction))
+				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
 					_sameDirection = true;
 				}
 				else
 				{
 					_sameDirection = false;
+				}
+			}
+			
+			if (_lastDirection.IsEqualApprox(Vector2.Up) || _lastDirection.IsEqualApprox(Vector2.Down))
+			{
+				if (Input.IsActionJustPressed("ui_cancel"))
+				{
+					_facingDirection = _lastDirection;
+					_shouldJump = true;
+				}
+				else
+				{
+					_facingDirection = Vector2.Zero;
 				}
 			}
 		}
@@ -98,13 +215,26 @@ public partial class BikeIdle : CharacterState
 			Controller.TargetPosition = new Vector2(16, 0);
 			if (Input.IsActionJustPressed("ui_right"))
 			{
-				if (lastDirection.IsEqualApprox(Controller.Direction))
+				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
 					_sameDirection = true;
 				}
 				else
 				{
 					_sameDirection = false;
+				}
+			}
+			
+			if (_lastDirection.IsEqualApprox(Vector2.Up) || _lastDirection.IsEqualApprox(Vector2.Down))
+			{
+				if (Input.IsActionJustPressed("ui_cancel"))
+				{
+					_facingDirection = _lastDirection;
+					_shouldJump = true;
+				}
+				else
+				{
+					_facingDirection = Vector2.Zero;
 				}
 			}
 		}
@@ -115,13 +245,26 @@ public partial class BikeIdle : CharacterState
 			Controller.TargetPosition = new Vector2(0, -16);
 			if (Input.IsActionJustPressed("ui_up"))
 			{
-				if (lastDirection.IsEqualApprox(Controller.Direction))
+				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
 					_sameDirection = true;
 				}
 				else
 				{
 					_sameDirection = false;
+				}
+			}
+			
+			if (_lastDirection.IsEqualApprox(Vector2.Left) || _lastDirection.IsEqualApprox(Vector2.Right))
+			{
+				if (Input.IsActionJustPressed("ui_cancel"))
+				{
+					_facingDirection = _lastDirection;
+					_shouldJump = true;
+				}
+				else
+				{
+					_facingDirection = Vector2.Zero;
 				}
 			}
 		}
@@ -131,13 +274,26 @@ public partial class BikeIdle : CharacterState
 			Controller.TargetPosition = new Vector2(0, 16);
 			if (Input.IsActionJustPressed("ui_down"))
 			{
-				if (lastDirection.IsEqualApprox(Controller.Direction))
+				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
 					_sameDirection = true;
 				}
 				else
 				{
 					_sameDirection = false;
+				}
+			}
+			
+			if (_lastDirection.IsEqualApprox(Vector2.Left) || _lastDirection.IsEqualApprox(Vector2.Right))
+			{
+				if (Input.IsActionJustPressed("ui_cancel"))
+				{
+					_facingDirection = _lastDirection;
+					_shouldJump = true;
+				}
+				else
+				{
+					_facingDirection = Vector2.Zero;
 				}
 			}
 		} 
@@ -147,13 +303,26 @@ public partial class BikeIdle : CharacterState
 			Controller.TargetPosition = new Vector2(-16, 0);
 			if (Input.IsActionJustPressed("ui_left"))
 			{
-				if (lastDirection.IsEqualApprox(Controller.Direction))
+				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
 					_sameDirection = true;
 				}
 				else
 				{
 					_sameDirection = false;
+				}
+			}
+			
+			if (_lastDirection.IsEqualApprox(Vector2.Up) || _lastDirection.IsEqualApprox(Vector2.Down))
+			{
+				if (Input.IsActionJustPressed("ui_cancel"))
+				{
+					_facingDirection = _lastDirection;
+					_shouldJump = true;
+				}
+				else
+				{
+					_facingDirection = Vector2.Zero;
 				}
 			}
 		}
@@ -163,7 +332,7 @@ public partial class BikeIdle : CharacterState
 			Controller.TargetPosition = new Vector2(16, 0);
 			if (Input.IsActionJustPressed("ui_right"))
 			{
-				if (lastDirection.IsEqualApprox(Controller.Direction))
+				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
 					_sameDirection = true;
 				}
@@ -172,11 +341,33 @@ public partial class BikeIdle : CharacterState
 					_sameDirection = false;
 				}
 			}
+			
+			if (_lastDirection.IsEqualApprox(Vector2.Up) || _lastDirection.IsEqualApprox(Vector2.Down))
+			{
+				if (Input.IsActionJustPressed("ui_cancel"))
+				{
+					_facingDirection = _lastDirection;
+					_shouldJump = true;
+				}
+				else
+				{
+					_facingDirection = Vector2.Zero;
+				}
+			}
 		}
     }
 
     protected override void ProcessPress(double delta)
 	{
+		if (_shouldJump && GameState.GameState.RidingAcroBike())
+		{
+			_shouldJump = false;
+
+			Machine.GetState<CharacterState>("BikeSideHop").SetUp(_facingDirection);
+			Machine.TransitionToState("BikeSideHop");
+			return;
+		}
+		
 		if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
 		    Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
 		{
@@ -197,7 +388,6 @@ public partial class BikeIdle : CharacterState
 			Machine.TransitionToState("Idle");
 		}
 		
-		
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
@@ -205,10 +395,10 @@ public partial class BikeIdle : CharacterState
 
 			if (_holdTime > HoldThreshold)
 			{
-				
+				_lastDirection = Controller.Direction;
 				if (Input.IsActionPressed("ui_cancel"))
 				{
-					if (GameState.GameState.RidingAcroBike())
+					if (GameState.GameState.RidingAcroBike() && !_shouldJump)
 					{
 						Machine.TransitionToState("BikeStartWheelieRide");
 						Machine.GetCurrentState<BikeStartWheelieRide>().SetUp(this);

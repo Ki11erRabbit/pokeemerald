@@ -58,7 +58,7 @@ public partial class BikeWheelieBounceRide : CharacterState
 
     public override double GetMovementSpeed()
     {
-        return Globals.Instance.AcroCyclingWheelieSpeed;
+        return Globals.Instance.WalkingSpeed;
     }
 
     public override void StartIdling()

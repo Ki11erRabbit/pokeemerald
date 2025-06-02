@@ -9,7 +9,7 @@ public partial class BikeWheelieRide : CharacterState
 	
 	public override double GetMovementSpeed()
 	{
-		return Globals.Instance.AcroCyclingWheelieSpeed;
+		return Globals.Instance.RunningSpeed;
 	}
 
     public override void SetUp(CharacterState state)

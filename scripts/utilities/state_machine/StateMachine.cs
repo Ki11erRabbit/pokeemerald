@@ -51,4 +51,9 @@ public partial class StateMachine : Node
     {
         return CurrentState as S;
     }
+    
+    public S GetState<S>(string state) where S : State
+    {
+        return GetNode<State>(state) as S;
+    }
 }

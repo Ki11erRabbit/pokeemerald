@@ -59,6 +59,15 @@ public enum AnimationState
     bike_acro_wheelie_turn_up,
     bike_acro_wheelie_turn_left,
     bike_acro_wheelie_turn_right,
+    bike_acro_side_hop_down_left,
+    bike_acro_side_hop_down_right,
+    bike_acro_side_hop_up_left,
+    bike_acro_side_hop_up_right,
+    bike_acro_side_hop_right_up,
+    bike_acro_side_hop_right_down,
+    bike_acro_side_hop_left_up,
+    bike_acro_side_hop_left_down,
+    
 }
 
 public abstract partial class CharacterState : State
@@ -118,6 +127,10 @@ public abstract partial class CharacterState : State
     }
     
     public virtual void SetUp(bool _)
+    {
+        
+    }
+    public virtual void SetUp(Vector2 _)
     {
         
     }
