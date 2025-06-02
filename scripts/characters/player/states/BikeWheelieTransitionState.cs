@@ -7,21 +7,21 @@ public abstract partial class BikeWheelieTransitionState : CharacterState
 {
     [Export] public AnimatedSprite2D AnimatedSprite;
     [Export] public double FrameThreshold = 0.3;
-    protected double _frameTime = 0.0;
+    protected double FrameTime = 0.0;
 
     public override void EnterState()
     {
         base.EnterState();
         SetStartFrame();
-        _frameTime = 0.0;
+        FrameTime = 0.0;
         Debug.Log("\t\t\tAnimation Started: " + AnimationState);
         AnimatedSprite.Play(AnimationState.ToString());
     }
 
     protected bool CheckForEnd(double delta)
     {
-        _frameTime += delta;
-        if (_frameTime >= FrameThreshold)
+        FrameTime += delta;
+        if (FrameTime >= FrameThreshold)
         {
             SetEndFrame();
             Debug.Log("Will be animating: " + AnimationState.ToString());
@@ -40,7 +40,7 @@ public abstract partial class BikeWheelieTransitionState : CharacterState
     public override void ExitState()
     {
         base.ExitState();
-        _frameTime = 0.0;
+        FrameTime = 0.0;
     }
 
     public override void SetUp(CharacterState state)
@@ -50,7 +50,7 @@ public abstract partial class BikeWheelieTransitionState : CharacterState
     
     public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
     {
-        if (_frameTime >= FrameThreshold)
+        if (FrameTime >= FrameThreshold)
         {
             SetEndFrame();
         }

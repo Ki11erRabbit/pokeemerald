@@ -5,11 +5,6 @@ namespace PokeEmerald.Characters.Player.States;
 
 public partial class BikeRideMach : CharacterState
 {
-    public override void _Process(double delta)
-	{
-		SetDirection();
-		ProcessPress(delta);
-	}
     
 	public override void SetUp(CharacterState state)
 	{
@@ -56,15 +51,12 @@ public partial class BikeRideMach : CharacterState
 	}
 
 
-	private void ProcessPress(double delta)
+	protected override void ProcessPress(double delta)
 	{
 		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
 		    !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right"))
 		{
-			if (AtTargetPosition())
-			{
-				Machine.TransitionToState("BikeIdle");
-			}
+			Machine.TransitionToState("BikeIdle");
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
@@ -76,10 +68,7 @@ public partial class BikeRideMach : CharacterState
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
 
-			if (AtTargetPosition())
-			{
-				EnterState();
-			}
+			EnterState();
 		}
 	}
 }

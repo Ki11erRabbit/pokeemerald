@@ -13,6 +13,15 @@ public partial class BikeWheelieBounceRide : CharacterState
     [Export] public double HoldThreshold = 0.1f;
     private double _holdTime = 0.0;
 
+    public override void ProcessBPress(double delta)
+    {
+        if (!Input.IsActionPressed("ui_cancel"))
+        {
+            StopAnimation();
+            Machine.TransitionToState("BikeStopWheelieRide");
+        }
+    }
+
     private void StopAnimation()
     {
         AnimationPlayer.Stop();
@@ -21,15 +30,11 @@ public partial class BikeWheelieBounceRide : CharacterState
         Dust.Play("default");
         Dust.Visible = false;
     }
-    
-    public override void _Process(double delta)
-    {
-        SetDirection();
-        ProcessPress(delta);
-    }
 
-    public override void Enter()
+
+    public override void EnterState()
     {
+        base.EnterState();
         Shadow.Visible = true;
         Dust.Visible = true;
         AnimationPlayer.AnimationFinished += PlayDustAnimation;
@@ -37,6 +42,7 @@ public partial class BikeWheelieBounceRide : CharacterState
         if (AnimationPlayer.IsPlaying()) return;
         AnimationPlayer.Play("wheelie_bounce");
     }
+
 
     public override void ExitState()
     {
@@ -65,15 +71,12 @@ public partial class BikeWheelieBounceRide : CharacterState
         return true;
     }
 
-    private void ProcessPress(double delta)
+    protected override void ProcessPress(double delta)
     {
         if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
             !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right"))
         {
-            if (AtTargetPosition())
-            {
-                Machine.TransitionToState("BikeWheelieBounceIdle");
-            }
+            Machine.TransitionToState("BikeWheelieBounceIdle");
         }
 
         if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
@@ -94,15 +97,7 @@ public partial class BikeWheelieBounceRide : CharacterState
         if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
             Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
         {
-            if (!Input.IsActionPressed("ui_cancel"))
-            {
-                StopAnimation();
-                Machine.TransitionToState("BikeStopWheelieRide");
-            }
-            else if (AtTargetPosition())
-            {
-                SetTargetPosition();
-            }
+            SetTargetPosition();
         }
     }
     

@@ -8,40 +8,43 @@ namespace PokeEmerald.Characters.Player.States;
 public partial class Walk : CharacterState
 {
 	private bool _tapped = false;
+
+	public override void ProcessBPress(double delta)
+	{
+		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
+		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
+		{
+			
+			if (Input.IsActionPressed("ui_cancel"))
+			{
+				if (!Colliding)
+				{
+					Machine.TransitionToState("Run");
+					Machine.GetCurrentState<Run>().SetUp(this);
+				}
+				else
+				{
+					Machine.TransitionToState("Idle");
+					Machine.GetCurrentState<CharacterState>().ResetTargetPosition();
+				}
+			}
+		}
+	}
+
 	public override void SetUp(bool tapped)
 	{
 		_tapped = tapped;
-		if (Colliding)
-		{
-			ResetTargetPosition();
-			Machine.TransitionToState("Idle");
-		}
 	}
 	
 	public override void SetUp(CharacterState state)
 	{
 		TargetPosition = state.TargetPosition;
-		if (Colliding)
-		{
-			ResetTargetPosition();
-			Machine.TransitionToState("Idle");
-		}
 	}
 
 	public override void ExitState()
 	{
 		base.ExitState();
 		_tapped = false;
-	}
-
-	public override void _Process(double delta)
-	{
-		if (AtTargetPosition())
-		{
-			SetDirection();
-			CheckCollision();
-			ProcessPress(delta);
-		}
 	}
 
 	public override double GetMovementSpeed()
@@ -70,7 +73,7 @@ public partial class Walk : CharacterState
 		return false;
 	}
 	
-	private void ProcessPress(double delta)
+	protected override void ProcessPress(double delta)
 	{
 		if (_tapped)
 		{
@@ -91,8 +94,8 @@ public partial class Walk : CharacterState
 			Machine.TransitionToState("BikeIdle");
 		}
 		
-		if ((Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
-		     Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right")))
+		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
+		     Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
 			
 			if (Input.IsActionPressed("ui_cancel"))
@@ -110,11 +113,7 @@ public partial class Walk : CharacterState
 
 				return;
 			}
-
-			if (!Colliding)
-			{
-				EnterState();
-			}
+			EnterState();
 		}
 	}
 	

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Diagnostics;
 using PokeEmerald.Utils.StateMachine;
 
 namespace PokeEmerald.Characters.StateMachine;
@@ -75,32 +76,38 @@ public abstract partial class CharacterState : State
     protected AnimationState PreviousAnimation;
     protected Character Character;
 
+    public override void _Process(double delta)
+    {
+        if (AtTargetPosition() || AtStartPosition())
+        {
+            SetDirection();
+            CheckCollision();
+            ProcessPress(delta);
+        }
+        ProcessBPress(delta);
+    }
+
+    
+    public virtual void ProcessBPress(double delta)
+    {
+        
+    }
+
     public override void EnterState()
     {
         StartPosition = Character.Position;
         Animation.PlayAnimation();
         SetTargetPosition();
-        Enter();
         RayCast.Collision += SetColliding;
-    }
-
-    public virtual void Enter()
-    {
-        
     }
 
     public override void _Ready()
     {
         Character = User as Character;
-        CustomReady();
     }
 
-    public virtual void CustomReady()
-    {
-        
-    }
     
-    public void SetColliding(bool colliding, GodotObject collider)
+    public virtual void SetColliding(bool colliding, GodotObject collider)
     {
         Colliding = colliding;
     }
@@ -206,7 +213,32 @@ public abstract partial class CharacterState : State
             Controller.Direction = Vector2.Right;
             Controller.TargetPosition = new Vector2(16, 0);
         }
-        CheckCollision();
+        
+        if (Input.IsActionJustPressed("ui_up"))
+        {
+            Controller.Direction = Vector2.Up;
+            Controller.TargetPosition = new Vector2(0, -16);
+        }
+        else if (Input.IsActionJustPressed("ui_down"))
+        {
+            Controller.Direction = Vector2.Down;
+            Controller.TargetPosition = new Vector2(0, 16);
+        } 
+        if (Input.IsActionJustPressed("ui_left"))
+        {
+            Controller.Direction = Vector2.Left;
+            Controller.TargetPosition = new Vector2(-16, 0);
+        }
+        else if (Input.IsActionJustPressed("ui_right"))
+        {
+            Controller.Direction = Vector2.Right;
+            Controller.TargetPosition = new Vector2(16, 0);
+        }
+    }
+
+    protected virtual void ProcessPress(double delta)
+    {
+        
     }
 
     protected void CheckCollision()

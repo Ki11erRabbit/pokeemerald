@@ -10,18 +10,15 @@ public partial class Idle : CharacterState
 	[Export] public double HoldThreshold = 0.1f;
 	private bool _sameDirection = false;
 	[Export] private double _holdTime = 0;
-    public override void _Process(double delta)
-	{
-		SetDirection();
-		ProcessPress(delta);
-	}
-    
 	
-    
-	public override void Enter()
+
+	public override void EnterState()
 	{
+		base.EnterState();
 		GameState.GameState.StopRidingBike();
+		
 	}
+
 
 	public override void ExitState()
 	{
@@ -66,12 +63,10 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					Debug.Log($"Vectors are the same: {lastDirection} {Controller.Direction}");
 					_sameDirection = true;
 				}
 				else
 				{
-					Debug.Log($"Vectors are not the same: {lastDirection} {Controller.Direction}");
 					_sameDirection = false;
 				}
 			}
@@ -84,12 +79,10 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					Debug.Log($"Vectors are the same: {lastDirection} {Controller.Direction}");
 					_sameDirection = true;
 				}
 				else
 				{
-					Debug.Log($"Vectors are not the same: {lastDirection} {Controller.Direction}");
 					_sameDirection = false;
 				}
 			}
@@ -102,12 +95,10 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					Debug.Log($"Vectors are the same: {lastDirection} {Controller.Direction}");
 					_sameDirection = true;
 				}
 				else
 				{
-					Debug.Log($"Vectors are not the same: {lastDirection} {Controller.Direction}");
 					_sameDirection = false;
 				}
 			}
@@ -120,19 +111,82 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					Debug.Log($"Vectors are the same: {lastDirection} {Controller.Direction}");
 					_sameDirection = true;
 				}
 				else
 				{
-					Debug.Log($"Vectors are not the same: {lastDirection} {Controller.Direction}");
+					_sameDirection = false;
+				}
+			}
+		}
+		
+		if (Input.IsActionJustPressed("ui_up"))
+		{
+			Controller.Direction = Vector2.Up;
+			Controller.TargetPosition = new Vector2(0, -16);
+			if (Input.IsActionJustPressed("ui_up"))
+			{
+				if (lastDirection.IsEqualApprox(Controller.Direction))
+				{
+					_sameDirection = true;
+				}
+				else
+				{
+					_sameDirection = false;
+				}
+			}
+		}
+		else if (Input.IsActionJustPressed("ui_down"))
+		{
+			Controller.Direction = Vector2.Down;
+			Controller.TargetPosition = new Vector2(0, 16);
+			if (Input.IsActionJustPressed("ui_down"))
+			{
+				if (lastDirection.IsEqualApprox(Controller.Direction))
+				{
+					_sameDirection = true;
+				}
+				else
+				{
+					_sameDirection = false;
+				}
+			}
+		} 
+		if (Input.IsActionJustPressed("ui_left"))
+		{
+			Controller.Direction = Vector2.Left;
+			Controller.TargetPosition = new Vector2(-16, 0);
+			if (Input.IsActionJustPressed("ui_left"))
+			{
+				if (lastDirection.IsEqualApprox(Controller.Direction))
+				{
+					_sameDirection = true;
+				}
+				else
+				{
+					_sameDirection = false;
+				}
+			}
+		}
+		else if (Input.IsActionJustPressed("ui_right"))
+		{
+			Controller.Direction = Vector2.Right;
+			Controller.TargetPosition = new Vector2(16, 0);
+			if (Input.IsActionJustPressed("ui_right"))
+			{
+				if (lastDirection.IsEqualApprox(Controller.Direction))
+				{
+					_sameDirection = true;
+				}
+				else
+				{
 					_sameDirection = false;
 				}
 			}
 		}
 	}
 
-	private void ProcessPress(double delta)
+	protected override void ProcessPress(double delta)
 	{
 		if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
 		    Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))

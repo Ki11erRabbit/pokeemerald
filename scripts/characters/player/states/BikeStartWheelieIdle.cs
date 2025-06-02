@@ -5,11 +5,10 @@ namespace PokeEmerald.Characters.Player.States;
 
 public partial class BikeStartWheelieIdle : BikeWheelieTransitionState
 {
-	
-	public override void _Process(double delta)
-	{
-		SetDirection();
 
+
+	public override void ProcessBPress(double delta)
+	{
 		if (CheckForEnd(delta))
 		{
 			if (!Input.IsActionPressed("ui_cancel"))
@@ -20,12 +19,9 @@ public partial class BikeStartWheelieIdle : BikeWheelieTransitionState
 			{
 				Machine.TransitionToState("BikeWheelieIdle");
 			}
-			
-			return;
 		}
-		
-		ProcessPress(delta);
 	}
+
 	public override double GetMovementSpeed()
 	{
 		return 0;
@@ -41,7 +37,7 @@ public partial class BikeStartWheelieIdle : BikeWheelieTransitionState
 	}
 
 
-	private void ProcessPress(double delta)
+	protected override void ProcessPress(double delta)
 	{
 		if (Input.IsActionJustPressed("ui_accept"))
 		{

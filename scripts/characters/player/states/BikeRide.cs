@@ -7,11 +7,7 @@ public partial class BikeRide : CharacterState
 {
 	[Export] public double SpeedUpThreshold = 0.3;
 	private double _speedUpTime = 0.0;
-    public override void _Process(double delta)
-	{
-		SetDirection();
-		ProcessPress(delta);
-	}
+   
     
 	public override void SetUp(CharacterState state)
 	{
@@ -52,15 +48,12 @@ public partial class BikeRide : CharacterState
 
 
 
-	private void ProcessPress(double delta)
+	protected override void ProcessPress(double delta)
 	{
 		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
 		    !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right"))
 		{
-			if (AtTargetPosition())
-			{
-				Machine.TransitionToState("BikeIdle");
-			}
+			Machine.TransitionToState("BikeIdle");
 			_speedUpTime = 0;
 		}
 
@@ -89,7 +82,7 @@ public partial class BikeRide : CharacterState
 				Machine.GetCurrentState<BikeStartWheelieRide>().SetUp(this);
 				_speedUpTime = 0;
 			}
-			else if (AtTargetPosition())
+			else
 			{
 				EnterState();
 			}

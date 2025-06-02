@@ -5,11 +5,8 @@ namespace PokeEmerald.Characters.Player.States;
 
 public partial class BikeStartWheelieRide : BikeWheelieTransitionState
 {
-	
-	public override void _Process(double delta)
+	public override void ProcessBPress(double delta)
 	{
-		SetDirection();
-
 		if (CheckForEnd(delta))
 		{
 			if (!Input.IsActionPressed("ui_cancel"))
@@ -21,11 +18,7 @@ public partial class BikeStartWheelieRide : BikeWheelieTransitionState
 				Machine.TransitionToState("BikeWheelieRide");
 				Machine.GetCurrentState<BikeWheelieRide>().SetUp(this);
 			}
-			
-			return;
 		}
-		
-		ProcessPress(delta);
 	}
 
 	public override double GetMovementSpeed()
@@ -47,15 +40,12 @@ public partial class BikeStartWheelieRide : BikeWheelieTransitionState
 		return false;
 	}
 
-	private void ProcessPress(double delta)
+	protected override void ProcessPress(double delta)
 	{
 		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
 		    !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right"))
 		{
-			if (AtTargetPosition())
-			{
-				Machine.TransitionToState("BikeWheelieIdle");
-			}
+			Machine.TransitionToState("BikeWheelieIdle");
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
@@ -66,10 +56,7 @@ public partial class BikeStartWheelieRide : BikeWheelieTransitionState
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-			if (AtTargetPosition())
-			{
-				SetTargetPosition();
-			}
+			SetTargetPosition();
 		}
 	}
 

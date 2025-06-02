@@ -39,7 +39,7 @@ public partial class BikeWheelieRide : CharacterState
     }
     
 
-	private void ProcessPress(double delta)
+    protected override void ProcessPress(double delta)
 	{
 		if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
 		    !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right"))
@@ -76,9 +76,4 @@ public partial class BikeWheelieRide : CharacterState
 		}
 	}
 
-    public override void _Process(double delta)
-    {
-        SetDirection();
-        ProcessPress(delta);
-    }
 }

@@ -12,7 +12,16 @@ public partial class BikeWheelieBounceIdle : CharacterState
     [ExportCategory("Constants")]
     [Export] public double HoldThreshold = 0.1f;
     private double _holdTime = 0.0;
-    
+
+
+    public override void ProcessBPress(double delta)
+    {
+        if (!Input.IsActionPressed("ui_cancel"))
+        {
+            StopAnimation();
+            Machine.TransitionToState("BikeStopWheelieIdle");
+        }
+    }
 
     private void StopAnimation()
     {
@@ -22,15 +31,10 @@ public partial class BikeWheelieBounceIdle : CharacterState
         Dust.Play("default");
         Dust.Visible = false;
     }
-    
-    public override void _Process(double delta)
-    {
-        SetDirection();
-        ProcessPress(delta);
-    }
 
-    public override void Enter()
+    public override void EnterState()
     {
+        base.EnterState();
         Shadow.Visible = true;
         Dust.Visible = true;
         AnimationPlayer.AnimationFinished += PlayDustAnimation;
@@ -66,15 +70,8 @@ public partial class BikeWheelieBounceIdle : CharacterState
         return true;
     }
     
-    private void ProcessPress(double delta)
+    protected override void ProcessPress(double delta)
     {
-        if (!Input.IsActionPressed("ui_cancel"))
-        {
-            StopAnimation();
-            Machine.TransitionToState("BikeStopWheelieIdle");
-            return;
-        }
-        
         if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
             Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
         {
