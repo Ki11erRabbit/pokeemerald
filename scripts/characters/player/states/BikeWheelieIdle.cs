@@ -56,8 +56,6 @@ public partial class BikeWheelieIdle : CharacterState
 		    StateMachine.AnimationState.bike_acro_wheelie_idle_right, 
 		    StateMachine.AnimationState.bike_acro_wheelie_idle_down
 	    ]);
-	    
-        
         return false;
     }
     

@@ -21,14 +21,7 @@ public partial class Walk : CharacterState
 			_ledgeColliding = false;
 			return;
 		}
-		if (AtTargetPosition() || AtStartPosition())
-		{
-			SetDirection();
-			
-			ProcessPress(delta);
-		}
-		ProcessBPress(delta);
-		
+		base._Process(delta);
 	}
 
 	public override void _Ready()
@@ -40,7 +33,6 @@ public partial class Walk : CharacterState
 	public virtual void SetLedgeColliding(bool colliding, GodotObject what)
 	{
 		_ledgeColliding = colliding;
-		Debug.Log("\n\tSetLedgeColliding\n");
 	}
 
 	public override void ProcessBPress(double delta)
@@ -122,11 +114,8 @@ public partial class Walk : CharacterState
 	
 	protected override void ProcessPress(double delta)
 	{
-		
-		
 		if (_tapped)
 		{
-			
 			Machine.TransitionToState("Idle");
 			return;
 		}

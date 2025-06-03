@@ -13,7 +13,36 @@ public partial class BikeSideHop : CharacterState
     [Export] public double HoldThreshold = 0.1f;
     private double _holdTime = 0.0;
     private Vector2 _facingDirection = Vector2.Zero;
+    [Export] public CharacterCollisonRayCast LedgeRayCast;
+    private bool _ledgeColliding = false;
 
+    public override void _Process(double delta)
+    {
+        if (_ledgeColliding && !Colliding)
+        {
+            Machine.TransitionToState("BikeRide");
+            var newState = Machine.GetCurrentState<CharacterState>();
+            Machine.TransitionToState("LedgeJump");
+            ResetTargetPosition();
+            Machine.GetCurrentState<CharacterState>().SetUp(newState);
+            _ledgeColliding = false;
+            return;
+        }
+        base._Process(delta);
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        LedgeRayCast.Collision += SetLedgeColliding;
+    }
+	
+    public virtual void SetLedgeColliding(bool colliding, GodotObject what)
+    {
+        _ledgeColliding = colliding;
+    }
+    
+    
     public override void SetUp(Vector2 direction)
     {
         _facingDirection = direction;
@@ -32,6 +61,13 @@ public partial class BikeSideHop : CharacterState
     public override void EnterState()
     {
         base.EnterState();
+		
+        LedgeRayCast.EnableCollision();
+        RayCast.EnableCollision();
+        _ledgeColliding = false;
+        Colliding = false;
+        CheckCollision();
+        
         Shadow.Visible = true;
         Dust.Visible = false;
         AnimationPlayer.AnimationFinished += PlayDustAnimation;
@@ -44,6 +80,8 @@ public partial class BikeSideHop : CharacterState
     {
         base.ExitState();
         AnimationPlayer.AnimationFinished -= PlayDustAnimation;
+        LedgeRayCast.DisableCollision();
+        RayCast.DisableCollision();
     }
 
     public override bool IsMoving()
@@ -139,5 +177,12 @@ public partial class BikeSideHop : CharacterState
     {
         Dust.Visible = false;
         Dust.AnimationFinished -= DustFinished;
+    }
+    
+    protected override void CheckCollision()
+    {
+        base.CheckCollision();
+        LedgeRayCast.TargetPosition = Controller.TargetPosition;
+        LedgeRayCast.CheckCollision();
     }
 }

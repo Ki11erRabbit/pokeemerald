@@ -3,21 +3,23 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class BikeWheelieBounceIdle : PlayerIdleState
+public partial class BikeWheelieBounceTurn : CharacterState
 {
     [ExportCategory("Nodes")]
     [Export] public AnimationPlayer AnimationPlayer;
     [Export] public Sprite2D Shadow;
     [Export] public AnimatedSprite2D Dust;
+    private CharacterState _previousState;
 
-
-    public override void ProcessBPress(double delta)
+    public override void _Process(double delta)
     {
-        if (!Input.IsActionPressed("ui_cancel"))
-        {
-            StopAnimation();
-            Machine.TransitionToState("BikeStopWheelieIdle");
-        }
+        Machine.ChangeState(_previousState);
+    }
+    
+    
+    public override void SetUp(CharacterState input)
+    {
+        _previousState = input;
     }
 
     private void StopAnimation()
@@ -59,7 +61,7 @@ public partial class BikeWheelieBounceIdle : PlayerIdleState
 
     public override void StartIdling()
     {
-        
+        Machine.TransitionToState("BikeWheelieBounceIdle");
     }
 
     public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
@@ -73,40 +75,6 @@ public partial class BikeWheelieBounceIdle : PlayerIdleState
         return false;
     }
     
-    protected override void ProcessPress(double delta)
-    {
-        if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
-            Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
-        {
-            if (SameDirection)
-            {
-                Machine.TransitionToState("BikeWheelieBounceRide");
-            }
-            else
-            {
-                Machine.TransitionToState("BikeWheelieBounceTurn");
-                Machine.GetCurrentState<CharacterState>().SetUp(this);
-            }
-            HoldTime = 0.0f;
-        }
-
-        if (Input.IsActionJustPressed("ui_accept"))
-        {
-            StopAnimation();
-            Machine.TransitionToState("Idle");
-        }
-		
-        if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
-            Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
-        {
-            HoldTime += delta;
-
-            if (HoldTime > HoldThreshold)
-            {
-                Machine.TransitionToState("BikeWheelieBounceRide");
-            }
-        }
-    }
 
     private void PlayDustAnimation(StringName _)
     {

@@ -8,14 +8,45 @@ public abstract partial class BikeWheelieTransitionState : CharacterState
     [Export] public AnimatedSprite2D AnimatedSprite;
     [Export] public double FrameThreshold = 0.3;
     protected double FrameTime = 0.0;
+    [Export] public CharacterCollisonRayCast LedgeRayCast;
+    private bool _ledgeColliding = false;
+
+    public override void _Process(double delta)
+    {
+        if (_ledgeColliding && !Colliding)
+        {
+            Machine.TransitionToState("LedgeJump");
+            ResetTargetPosition();
+            Machine.GetCurrentState<CharacterState>().SetUp(this);
+            _ledgeColliding = false;
+            return;
+        }
+        base._Process(delta);
+    }
+
+    public override void _Ready()
+    {
+        base._Ready();
+        LedgeRayCast.Collision += SetLedgeColliding;
+    }
+	
+    public virtual void SetLedgeColliding(bool colliding, GodotObject what)
+    {
+        _ledgeColliding = colliding;
+    }
 
     public override void EnterState()
     {
         base.EnterState();
         SetStartFrame();
         FrameTime = 0.0;
-        Debug.Log("\t\t\tAnimation Started: " + AnimationState);
         AnimatedSprite.Play(AnimationState.ToString());
+		
+        LedgeRayCast.EnableCollision();
+        RayCast.EnableCollision();
+        _ledgeColliding = false;
+        Colliding = false;
+        CheckCollision();
     }
 
     protected bool CheckForEnd(double delta)
@@ -41,6 +72,8 @@ public abstract partial class BikeWheelieTransitionState : CharacterState
     {
         base.ExitState();
         FrameTime = 0.0;
+        LedgeRayCast.DisableCollision();
+        RayCast.DisableCollision();
     }
 
     public override void SetUp(CharacterState state)
@@ -104,4 +137,10 @@ public abstract partial class BikeWheelieTransitionState : CharacterState
         }
     }
 
+    protected override void CheckCollision()
+    {
+        base.CheckCollision();
+        LedgeRayCast.TargetPosition = Controller.TargetPosition;
+        LedgeRayCast.CheckCollision();
+    }
 }

@@ -9,6 +9,44 @@ public partial class BikeRide : CharacterState
 	private double _speedUpTime = 0.0;
    
     
+	[Export] public CharacterCollisonRayCast LedgeRayCast;
+	private bool _ledgeColliding = false;
+
+	public override void _Process(double delta)
+	{
+		if (_ledgeColliding && !Colliding)
+		{
+			Machine.TransitionToState("LedgeJump");
+			ResetTargetPosition();
+			Machine.GetCurrentState<CharacterState>().SetUp(this);
+			_ledgeColliding = false;
+			return;
+		}
+		base._Process(delta);
+	}
+
+	public override void EnterState()
+	{
+		base.EnterState();
+		
+		LedgeRayCast.EnableCollision();
+		RayCast.EnableCollision();
+		_ledgeColliding = false;
+		Colliding = false;
+		CheckCollision();
+	}
+	
+	public override void _Ready()
+	{
+		base._Ready();
+		LedgeRayCast.Collision += SetLedgeColliding;
+	}
+	
+	public virtual void SetLedgeColliding(bool colliding, GodotObject what)
+	{
+		_ledgeColliding = colliding;
+	}
+	
 	public override void SetUp(CharacterState state)
 	{
 		TargetPosition = state.TargetPosition;
@@ -18,6 +56,8 @@ public partial class BikeRide : CharacterState
 	{
 		base.ExitState();
 		_speedUpTime = 0;
+		LedgeRayCast.DisableCollision();
+		RayCast.DisableCollision();
 	}
 	public override double GetMovementSpeed()
 	{
@@ -87,5 +127,12 @@ public partial class BikeRide : CharacterState
 				EnterState();
 			}
 		}
+	}
+	
+	protected override void CheckCollision()
+	{
+		base.CheckCollision();
+		LedgeRayCast.TargetPosition = Controller.TargetPosition;
+		LedgeRayCast.CheckCollision();
 	}
 }
