@@ -12,9 +12,11 @@ public partial class CharacterCollisonRayCast : RayCast2D
 	[Export] public CharacterController CharacterController;
 
 	[Export] public GodotObject Collider;
+	private bool _disableCollision = false;
 
 	public void CheckCollision()
 	{
+		if (_disableCollision) return;
 		if (IsColliding())
 		{
 			Collider = GetCollider();
@@ -22,12 +24,25 @@ public partial class CharacterCollisonRayCast : RayCast2D
 		}
 		else
 		{
-			EmitSignal(SignalName.Collision, false, new Variant(), -1);
+			EmitSignal(SignalName.Collision, false, new Variant());
 		}
 	}
 	
 	public override void _Process(double delta)
 	{
+		if (_disableCollision) return;
 		CheckCollision();
+	}
+
+	public void DisableCollision()
+	{
+		_disableCollision = true;
+		EmitSignal(SignalName.Collision, false, new Variant());
+	}
+
+	public void EnableCollision()
+	{
+		_disableCollision = false;
+		EmitSignal(SignalName.Collision, false, new Variant());
 	}
 }

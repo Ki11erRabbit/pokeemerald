@@ -13,7 +13,6 @@ public partial class Walk : CharacterState
 
 	public override void _Process(double delta)
 	{
-		
 		if (_ledgeColliding && !Colliding)
 		{
 			Machine.TransitionToState("LedgeJump");
@@ -25,10 +24,11 @@ public partial class Walk : CharacterState
 		if (AtTargetPosition() || AtStartPosition())
 		{
 			SetDirection();
-			CheckCollision();
+			
 			ProcessPress(delta);
 		}
 		ProcessBPress(delta);
+		
 	}
 
 	public override void _Ready()
@@ -75,10 +75,23 @@ public partial class Walk : CharacterState
 		TargetPosition = state.TargetPosition;
 	}
 
+	public override void EnterState()
+	{
+		base.EnterState();
+		
+		LedgeRayCast.EnableCollision();
+		RayCast.EnableCollision();
+		_ledgeColliding = false;
+		Colliding = false;
+		CheckCollision();
+	}
+
 	public override void ExitState()
 	{
 		base.ExitState();
 		_tapped = false;
+		LedgeRayCast.DisableCollision();
+		RayCast.DisableCollision();
 	}
 
 	public override double GetMovementSpeed()

@@ -21,13 +21,13 @@ Character = NodePath("..")
 
 [node name="CollisonRayCast" type="RayCast2D" parent="."]
 position = Vector2(8, 8)
-target_position = Vector2(0, 16)
+target_position = Vector2(0, 11)
 collide_with_areas = true
 script = ExtResource("3_0v81k")
 
 [node name="LedgeRayCast" type="RayCast2D" parent="."]
 position = Vector2(8, 8)
-target_position = Vector2(0, 16)
+target_position = Vector2(0, 11)
 collision_mask = 2
 collide_with_areas = true
 script = ExtResource("3_0v81k")

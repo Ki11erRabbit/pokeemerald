@@ -14,6 +14,7 @@ public abstract partial class PlayerIdleState : CharacterState
     {
         HoldTime = 0;
         SameDirection = false;
+        Colliding = false;
     }
     
     public override double GetMovementSpeed()

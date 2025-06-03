@@ -80,7 +80,7 @@ public abstract partial class CharacterState : State
     [ExportCategory("Vars")] 
     [Export] public Vector2 TargetPosition;
     [Export] public Vector2 StartPosition;
-    protected bool Colliding = false;
+    public bool Colliding = false;
     public AnimationState AnimationState { get; set; } = AnimationState.idle_down;
     protected AnimationState PreviousAnimation;
     protected Character Character;
