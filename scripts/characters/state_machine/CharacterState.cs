@@ -116,7 +116,7 @@ public abstract partial class CharacterState : State
     }
 
     
-    public virtual void SetColliding(bool colliding, GodotObject collider)
+    public virtual void SetColliding(bool colliding, GodotObject what)
     {
         Colliding = colliding;
     }
@@ -183,7 +183,7 @@ public abstract partial class CharacterState : State
 
     public abstract void StartIdling();
 
-    public void SetTargetPosition()
+    public virtual void SetTargetPosition()
     {
         StartPosition = Character.Position;
         TargetPosition = Character.Position + Controller.Direction * Globals.Instance.TileSize;
@@ -254,7 +254,7 @@ public abstract partial class CharacterState : State
         
     }
 
-    protected void CheckCollision()
+    protected virtual void CheckCollision()
     {
         RayCast.TargetPosition = Controller.TargetPosition;
         RayCast.CheckCollision();

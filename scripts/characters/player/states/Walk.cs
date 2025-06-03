@@ -8,6 +8,40 @@ namespace PokeEmerald.Characters.Player.States;
 public partial class Walk : CharacterState
 {
 	private bool _tapped = false;
+	[Export] public CharacterCollisonRayCast LedgeRayCast;
+	private bool _ledgeColliding = false;
+
+	public override void _Process(double delta)
+	{
+		
+		if (_ledgeColliding && !Colliding)
+		{
+			Machine.TransitionToState("LedgeJump");
+			ResetTargetPosition();
+			Machine.GetCurrentState<CharacterState>().SetUp(this);
+			_ledgeColliding = false;
+			return;
+		}
+		if (AtTargetPosition() || AtStartPosition())
+		{
+			SetDirection();
+			CheckCollision();
+			ProcessPress(delta);
+		}
+		ProcessBPress(delta);
+	}
+
+	public override void _Ready()
+	{
+		base._Ready();
+		LedgeRayCast.Collision += SetLedgeColliding;
+	}
+	
+	public virtual void SetLedgeColliding(bool colliding, GodotObject what)
+	{
+		_ledgeColliding = colliding;
+		Debug.Log("\n\tSetLedgeColliding\n");
+	}
 
 	public override void ProcessBPress(double delta)
 	{
@@ -75,8 +109,11 @@ public partial class Walk : CharacterState
 	
 	protected override void ProcessPress(double delta)
 	{
+		
+		
 		if (_tapped)
 		{
+			
 			Machine.TransitionToState("Idle");
 			return;
 		}
@@ -97,7 +134,6 @@ public partial class Walk : CharacterState
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		     Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-			
 			if (Input.IsActionPressed("ui_cancel"))
 			{
 				if (!Colliding)
@@ -110,37 +146,16 @@ public partial class Walk : CharacterState
 					Machine.TransitionToState("Idle");
 					Machine.GetCurrentState<CharacterState>().ResetTargetPosition();
 				}
-
 				return;
 			}
 			EnterState();
 		}
 	}
-	
-	private class Tapped : IReachedTargetPosition
-	{
-		public void Colliding(CharacterState self)
-		{
-			self.ResetTargetPosition();
-			self.Machine.TransitionToState("Idle");
-		}
 
-		public void NotColliding(CharacterState self)
-		{
-			self.Machine.TransitionToState("Idle");
-		}
-	}
-	
-	private class HeldDown : IReachedTargetPosition
+	protected override void CheckCollision()
 	{
-		public void Colliding(CharacterState self)
-		{
-			self.EnterState();
-		}
-
-		public void NotColliding(CharacterState self)
-		{
-			self.ResetTargetPosition();
-		}
+		base.CheckCollision();
+		LedgeRayCast.TargetPosition = Controller.TargetPosition;
+		LedgeRayCast.CheckCollision();
 	}
 }

@@ -4,41 +4,13 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Idle : CharacterState
+public partial class Idle : PlayerIdleState
 {
-	[ExportCategory("Vars")] 
-	[Export] public double HoldThreshold = 0.1f;
-	private bool _sameDirection = false;
-	[Export] private double _holdTime = 0;
-	
-
 	public override void EnterState()
 	{
 		base.EnterState();
 		GameState.GameState.StopRidingBike();
-		
-	}
 
-
-	public override void ExitState()
-	{
-		_holdTime = 0;
-		_sameDirection = false;
-	}
-
-	public override double GetMovementSpeed()
-	{
-		return 0;
-	}
-
-	public override void StartIdling()
-	{
-		
-	}
-
-	public override bool IsMoving()
-	{
-		return false;
 	}
 
 	public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
@@ -63,11 +35,11 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 		}
@@ -79,11 +51,11 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 		} 
@@ -95,11 +67,11 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 		}
@@ -111,11 +83,11 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 		}
@@ -128,11 +100,11 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 		}
@@ -144,11 +116,11 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 		} 
@@ -160,11 +132,11 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 		}
@@ -176,11 +148,11 @@ public partial class Idle : CharacterState
 			{
 				if (lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 		}
@@ -191,7 +163,7 @@ public partial class Idle : CharacterState
 		if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
 		    Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
 		{
-			if (_sameDirection)
+			if (SameDirection)
 			{
 				Machine.TransitionToState("Walk");
 				if (!Colliding)
@@ -208,7 +180,7 @@ public partial class Idle : CharacterState
 				Machine.TransitionToState("Turn");
 				Machine.GetCurrentState<Turn>().SetUp(this);
 			}
-			_holdTime = 0.0f;
+			HoldTime = 0.0f;
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
@@ -219,11 +191,11 @@ public partial class Idle : CharacterState
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-			_holdTime += delta;
+			HoldTime += delta;
 
-			if (_holdTime > HoldThreshold)
+			if (HoldTime > HoldThreshold)
 			{
-				if (_sameDirection)
+				if (SameDirection)
 				{
 					if (!Colliding)
 					{

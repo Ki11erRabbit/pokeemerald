@@ -3,11 +3,8 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class BikeIdle : CharacterState
+public partial class BikeIdle : PlayerIdleState
 {
-	[Export] public double HoldThreshold = 0.1;
-	private bool _sameDirection = false;
-	private double _holdTime = 0.0;
 	private Vector2 _facingDirection;
 	private bool _shouldJump = false;
 	private Vector2 _lastDirection;
@@ -40,21 +37,6 @@ public partial class BikeIdle : CharacterState
 		base.ExitState();
 		_facingDirection = Vector2.Zero;
 	}
-
-	public override double GetMovementSpeed()
-	{
-		return 0;
-	}
-
-    public override bool IsMoving()
-    {
-        return false;
-    }
-
-    public override void StartIdling()
-    {
-        
-    }
 
     public override bool ConfigureAnimationState(AnimatedSprite2D animatedSprite)
     {
@@ -131,11 +113,11 @@ public partial class BikeIdle : CharacterState
 			{
 				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 			if (_lastDirection.IsEqualApprox(Vector2.Right) || _lastDirection.IsEqualApprox(Vector2.Left))
@@ -159,11 +141,11 @@ public partial class BikeIdle : CharacterState
 			{
 				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 			
@@ -188,11 +170,11 @@ public partial class BikeIdle : CharacterState
 			{
 				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 			
@@ -217,11 +199,11 @@ public partial class BikeIdle : CharacterState
 			{
 				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 			
@@ -247,11 +229,11 @@ public partial class BikeIdle : CharacterState
 			{
 				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 			
@@ -276,11 +258,11 @@ public partial class BikeIdle : CharacterState
 			{
 				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 			
@@ -305,11 +287,11 @@ public partial class BikeIdle : CharacterState
 			{
 				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 			
@@ -334,11 +316,11 @@ public partial class BikeIdle : CharacterState
 			{
 				if (_lastDirection.IsEqualApprox(Controller.Direction))
 				{
-					_sameDirection = true;
+					SameDirection = true;
 				}
 				else
 				{
-					_sameDirection = false;
+					SameDirection = false;
 				}
 			}
 			
@@ -371,7 +353,7 @@ public partial class BikeIdle : CharacterState
 		if (Input.IsActionJustReleased("ui_up") || Input.IsActionJustReleased("ui_down") ||
 		    Input.IsActionJustReleased("ui_left") || Input.IsActionJustReleased("ui_right"))
 		{
-			if (_sameDirection)
+			if (SameDirection)
 			{
 				Machine.TransitionToState("BikeRide");
 			}
@@ -380,7 +362,7 @@ public partial class BikeIdle : CharacterState
 				Machine.TransitionToState("BikeTurn");
 				Machine.GetCurrentState<CharacterState>().SetUp(this);
 			}
-			_holdTime = 0.0f;
+			HoldTime = 0.0f;
 		}
 
 		if (Input.IsActionJustPressed("ui_accept"))
@@ -391,9 +373,9 @@ public partial class BikeIdle : CharacterState
 		if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
 		    Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
 		{
-			_holdTime += delta;
+			HoldTime += delta;
 
-			if (_holdTime > HoldThreshold)
+			if (HoldTime > HoldThreshold)
 			{
 				_lastDirection = Controller.Direction;
 				if (Input.IsActionPressed("ui_cancel"))
