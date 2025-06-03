@@ -18,8 +18,8 @@ public partial class LedgeJump : CharacterState
 
     private void AnimateSprite(double delta)
     {
-        _timeElapsed += delta;
-        if (_timeElapsed > 0.3 && AtTargetPosition())
+        _timeElapsed += delta / delta;
+        if (AtTargetPosition())
         {
             var position = Sprite.Position;
             Sprite.Position = new Vector2(position.X, 4);
@@ -30,7 +30,7 @@ public partial class LedgeJump : CharacterState
             return;
         }
 
-        var y = Mathf.Floor(4 - 160 * _timeElapsed + 533.333 * Mathf.Pow(_timeElapsed, 2));
+        var y = Mathf.Floor(4 - 1.5 * _timeElapsed + 0.0468 * Mathf.Pow(_timeElapsed, 2));
         var pos = Sprite.Position;
         Sprite.Position = new Vector2(pos.X, (float) y);
     }

@@ -123,7 +123,7 @@ public partial class BikeWheelieRide : CharacterState
 	protected override void CheckCollision()
 	{
 		base.CheckCollision();
-		LedgeRayCast.TargetPosition = Controller.TargetPosition;
+		LedgeRayCast.TargetPosition = Controller.TargetPosition / 2;
 		LedgeRayCast.CheckCollision();
 	}
 }

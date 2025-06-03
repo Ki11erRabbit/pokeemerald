@@ -6,8 +6,8 @@ public partial class Globals : Node
 {
     [ExportCategory("Constants")] 
     [Export] public long TileSize { get; set; } = 16;
-    [Export] public double WalkingSpeed { get; set; } = 4.0;
-    [Export] public double RunningSpeed { get; set; } = 8.0;
+    [Export] public double WalkingSpeed { get; set; } = 3.75;
+    [Export] public double RunningSpeed { get; set; } = 7.5;
     [Export] public double AcroCyclingSpeed { get; set; } = 10.67;
     [Export] public double AcroCyclingWheelieSpeed { get; set; } = 8.0;
     [Export] public double MachCyclingSpeed { get; set; } = 16;

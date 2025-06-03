@@ -177,6 +177,8 @@ public abstract partial class CharacterState : State
         }
         delta *= Globals.Instance.TileSize * GetMovementSpeed();
         Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
+        var pos = Character.Position;
+        Character.Position = new Vector2(Mathf.Floor(pos.X), Mathf.Floor(pos.Y));
     }
 
     public abstract bool IsMoving();
@@ -256,7 +258,7 @@ public abstract partial class CharacterState : State
 
     protected virtual void CheckCollision()
     {
-        RayCast.TargetPosition = Controller.TargetPosition;
+        RayCast.TargetPosition = Controller.TargetPosition / 2;
         RayCast.CheckCollision();
     }
 
