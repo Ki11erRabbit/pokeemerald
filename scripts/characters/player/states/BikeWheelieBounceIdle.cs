@@ -9,11 +9,24 @@ public partial class BikeWheelieBounceIdle : PlayerIdleState
     [Export] public AnimationPlayer AnimationPlayer;
     [Export] public Sprite2D Shadow;
     [Export] public AnimatedSprite2D Dust;
+    [Export] public CharacterCollisonRayCast BunnyHopRayCast;
+    private bool _bunnyColliding = false;
 
+    public override void _Ready()
+    {
+        base._Ready();
+        
+        BunnyHopRayCast.Collision += SetBunnyColliding;
+    }
+    
+    public void SetBunnyColliding(bool colliding, GodotObject what)
+    {
+        _bunnyColliding = colliding;
+    }
 
     public override void ProcessBPress(double delta)
     {
-        if (!Input.IsActionPressed("ui_cancel"))
+        if (!Input.IsActionPressed("ui_cancel") && !_bunnyColliding)
         {
             StopAnimation();
             Machine.TransitionToState("BikeStopWheelieIdle");
@@ -90,7 +103,7 @@ public partial class BikeWheelieBounceIdle : PlayerIdleState
             HoldTime = 0.0f;
         }
 
-        if (Input.IsActionJustPressed("ui_accept"))
+        if (Input.IsActionJustPressed("ui_accept") && !_bunnyColliding)
         {
             StopAnimation();
             Machine.TransitionToState("Idle");

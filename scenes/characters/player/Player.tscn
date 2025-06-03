@@ -1,4 +1,4 @@
-[gd_scene load_steps=176 format=3 uid="uid://didjjlyomyes2"]
+[gd_scene load_steps=177 format=3 uid="uid://didjjlyomyes2"]
 
 [ext_resource type="PackedScene" uid="uid://bus3gc6sk80pf" path="res://scenes/characters/Character.tscn" id="1_db84v"]
 [ext_resource type="Texture2D" uid="uid://4holuep1sky7" path="res://assets/player/brendon.png" id="2_b7oxf"]
@@ -25,6 +25,7 @@
 [ext_resource type="Script" uid="uid://bes336fsid2g8" path="res://scripts/characters/player/states/BikeWheelieBounceTurn.cs" id="21_7nsyd"]
 [ext_resource type="Script" uid="uid://d3fju3r5tsb1g" path="res://scripts/characters/player/states/BikeWheelieBounceRide.cs" id="21_jb2jc"]
 [ext_resource type="Script" uid="uid://ci70jmlpa5ht2" path="res://scripts/characters/player/states/BikeSideHop.cs" id="22_b0u6j"]
+[ext_resource type="Script" uid="uid://wlnr7psuglwx" path="res://scripts/characters/CharacterCollisonRayCast.cs" id="23_nr4l0"]
 [ext_resource type="Script" uid="uid://dr17qq8b6s155" path="res://scripts/characters/player/states/LedgeJump.cs" id="23_yayhp"]
 [ext_resource type="Texture2D" uid="uid://cptig8s3opqog" path="res://assets/player/shadow.png" id="24_jb2jc"]
 [ext_resource type="Texture2D" uid="uid://g4f4ab1v7oul" path="res://assets/effects/jump_dust.png" id="25_cskv4"]
@@ -1559,11 +1560,12 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieBounceIdle" type="Node" parent="StateMachine" index="15" node_paths=PackedStringArray("AnimationPlayer", "Shadow", "Dust", "Controller", "RayCast", "Animation", "User", "Machine")]
+[node name="BikeWheelieBounceIdle" type="Node" parent="StateMachine" index="15" node_paths=PackedStringArray("AnimationPlayer", "Shadow", "Dust", "BunnyHopRayCast", "Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("20_02lei")
 AnimationPlayer = NodePath("../../Animation/AnimationPlayer")
 Shadow = NodePath("../../Animation/Shadow")
 Dust = NodePath("../../Animation/Particles")
+BunnyHopRayCast = NodePath("../../BounceTileRayCast")
 Controller = NodePath("../../CharacterController")
 RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
@@ -1581,12 +1583,13 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="BikeWheelieBounceRide" type="Node" parent="StateMachine" index="17" node_paths=PackedStringArray("AnimationPlayer", "Shadow", "Dust", "LedgeRayCast", "Controller", "RayCast", "Animation", "User", "Machine")]
+[node name="BikeWheelieBounceRide" type="Node" parent="StateMachine" index="17" node_paths=PackedStringArray("AnimationPlayer", "Shadow", "Dust", "LedgeRayCast", "BunnyHopRayCast", "Controller", "RayCast", "Animation", "User", "Machine")]
 script = ExtResource("21_jb2jc")
 AnimationPlayer = NodePath("../../Animation/AnimationPlayer")
 Shadow = NodePath("../../Animation/Shadow")
 Dust = NodePath("../../Animation/Particles")
 LedgeRayCast = NodePath("../../LedgeRayCast")
+BunnyHopRayCast = NodePath("../../BounceTileRayCast")
 Controller = NodePath("../../CharacterController")
 RayCast = NodePath("../../CollisonRayCast")
 Animation = NodePath("../../Animation")
@@ -1622,7 +1625,16 @@ CharacterController = NodePath("../CharacterController")
 [node name="LedgeRayCast" parent="." index="6" node_paths=PackedStringArray("CharacterController")]
 CharacterController = NodePath("../CharacterController")
 
-[node name="Animation" parent="." index="7" node_paths=PackedStringArray("CharacterController", "AnimatedSprite", "StateMachine")]
+[node name="BounceTileRayCast" type="RayCast2D" parent="." index="7" node_paths=PackedStringArray("CharacterController")]
+position = Vector2(8, 8)
+target_position = Vector2(0, 8)
+collision_mask = 4
+hit_from_inside = true
+collide_with_areas = true
+script = ExtResource("23_nr4l0")
+CharacterController = NodePath("../CharacterController")
+
+[node name="Animation" parent="." index="8" node_paths=PackedStringArray("CharacterController", "AnimatedSprite", "StateMachine")]
 CharacterController = NodePath("../CharacterController")
 AnimatedSprite = NodePath("Animation")
 StateMachine = NodePath("../StateMachine")

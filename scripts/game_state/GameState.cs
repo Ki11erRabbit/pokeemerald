@@ -15,7 +15,7 @@ public partial class GameState : Node
 	public static GameState Instance { get; private set; }
 	
 	[ExportCategory("Flags")]
-	[Export] public BikeState BikeState { get; set; } = BikeState.MachBike;
+	[Export] public BikeState BikeState { get; set; } = BikeState.AcroBike;
 	[Export] public bool RidingBike { get; private set; } = false;
 	
 	public static bool CanRideBike()

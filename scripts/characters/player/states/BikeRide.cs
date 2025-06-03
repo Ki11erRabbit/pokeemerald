@@ -119,7 +119,7 @@ public partial class BikeRide : CharacterState
 			if (_speedUpTime > SpeedUpThreshold && !GameState.GameState.RidingAcroBike() && GameState.GameState.Instance.RidingBike)
 			{
 				Machine.TransitionToState("BikeRideMach");
-				Machine.GetCurrentState<BikeStartWheelieRide>().SetUp(this);
+				Machine.GetCurrentState<BikeRideMach>().SetUp(this);
 				_speedUpTime = 0;
 			}
 			else

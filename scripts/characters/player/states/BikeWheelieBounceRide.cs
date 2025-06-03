@@ -15,10 +15,12 @@ public partial class BikeWheelieBounceRide : CharacterState
 
     [Export] public CharacterCollisonRayCast LedgeRayCast;
     private bool _ledgeColliding = false;
+    [Export] public CharacterCollisonRayCast BunnyHopRayCast;
+    private bool _bunnyColliding = false;
 
     public override void _Process(double delta)
     {
-        if (_ledgeColliding && !Colliding)
+        if (_ledgeColliding && !Colliding && !_bunnyColliding)
         {
             AnimationPlayer.Stop();
             AnimationPlayer.Play("RESET");
@@ -29,13 +31,20 @@ public partial class BikeWheelieBounceRide : CharacterState
             _ledgeColliding = false;
             return;
         }
-        base._Process(delta);
+        if (AtTargetPosition() || AtStartPosition())
+        {
+            SetDirection();
+            CheckCollision();
+            ProcessPress(delta);
+        }
+        ProcessBPress(delta);
     }
 
     public override void _Ready()
     {
         base._Ready();
         LedgeRayCast.Collision += SetLedgeColliding;
+        BunnyHopRayCast.Collision += SetBunnyColliding;
     }
 	
     public virtual void SetLedgeColliding(bool colliding, GodotObject what)
@@ -43,9 +52,14 @@ public partial class BikeWheelieBounceRide : CharacterState
         _ledgeColliding = colliding;
     }
     
+    public void SetBunnyColliding(bool colliding, GodotObject what)
+    {
+        _bunnyColliding = colliding;
+    }
+    
     public override void ProcessBPress(double delta)
     {
-        if (!Input.IsActionPressed("ui_cancel"))
+        if (!Input.IsActionPressed("ui_cancel") && !_bunnyColliding)
         {
             StopAnimation();
             Machine.TransitionToState("BikeStopWheelieRide");
@@ -126,21 +140,21 @@ public partial class BikeWheelieBounceRide : CharacterState
 
         if (!Input.IsActionPressed("ui_up") && !Input.IsActionPressed("ui_down") &&
             !Input.IsActionPressed("ui_left") && !Input.IsActionPressed("ui_right") &&
-            !Input.IsActionPressed("ui_cancel"))
+            !Input.IsActionPressed("ui_cancel") && !_bunnyColliding)
         {
             StopAnimation();
             Machine.TransitionToState("BikeStopWheelieIdle");
             return;
         }
 
-        if (Input.IsActionJustPressed("ui_accept"))
+        if (Input.IsActionJustPressed("ui_accept") && !_bunnyColliding)
         {
             StopAnimation();
             Machine.TransitionToState("Idle");
         }
 
-        if (Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
-            Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right"))
+        if ((Input.IsActionPressed("ui_up") || Input.IsActionPressed("ui_down") ||
+            Input.IsActionPressed("ui_left") || Input.IsActionPressed("ui_right")))
         {
             SetTargetPosition();
         }
@@ -163,5 +177,22 @@ public partial class BikeWheelieBounceRide : CharacterState
         base.CheckCollision();
         LedgeRayCast.TargetPosition = Controller.TargetPosition / 2;
         LedgeRayCast.CheckCollision();
+        BunnyHopRayCast.TargetPosition = Controller.TargetPosition / 2;
+        BunnyHopRayCast.CheckCollision();
+    }
+
+    public override void Move(double delta)
+    {
+        CheckCollision();
+        Debug.Log("BunnyColliding: " + _bunnyColliding);
+        if (Colliding && AtStartPosition() && !_bunnyColliding)
+        {
+            ResetTargetPosition();
+            return;
+        }
+        delta *= Globals.Instance.TileSize * GetMovementSpeed();
+        Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
+        var pos = Character.Position;
+        Character.Position = new Vector2(Mathf.Floor(pos.X), Mathf.Floor(pos.Y));
     }
 }

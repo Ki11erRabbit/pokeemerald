@@ -1,0 +1,45 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bcm15weoks8wt"]
+
+[ext_resource type="Texture2D" uid="uid://c2ymxdh70ulr6" path="res://assets/tilesets/bunny_hop_tiles.png" id="1_v6sal"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j0sv7"]
+resource_name = "bunny_hop_tiles"
+texture = ExtResource("1_v6sal")
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:0/0/terrains_peering_bit/right_side = 0
+0:0/0/terrains_peering_bit/left_side = 0
+0:0/0/terrains_peering_bit/top_left_corner = 0
+0:0/0/terrains_peering_bit/top_side = 0
+0:0/0/terrains_peering_bit/top_right_corner = 0
+1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrain = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0/terrains_peering_bit/right_side = 0
+1:0/0/terrains_peering_bit/bottom_right_corner = 0
+1:0/0/terrains_peering_bit/bottom_side = 0
+1:0/0/terrains_peering_bit/bottom_left_corner = 0
+1:0/0/terrains_peering_bit/left_side = 0
+2:0/0 = 0
+2:0/0/terrain_set = 0
+2:0/0/terrain = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0/terrains_peering_bit/right_side = 0
+2:0/0/terrains_peering_bit/bottom_right_corner = 0
+2:0/0/terrains_peering_bit/bottom_side = 0
+2:0/0/terrains_peering_bit/bottom_left_corner = 0
+2:0/0/terrains_peering_bit/left_side = 0
+2:0/0/terrains_peering_bit/top_left_corner = 0
+2:0/0/terrains_peering_bit/top_side = 0
+2:0/0/terrains_peering_bit/top_right_corner = 0
+
+[resource]
+physics_layer_0/collision_layer = 4
+physics_layer_0/collision_mask = 4
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "BunnyTiles"
+terrain_set_0/terrain_0/color = Color(0.945098, 0.345098, 0.25098, 1)
+sources/0 = SubResource("TileSetAtlasSource_j0sv7")
