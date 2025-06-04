@@ -79,16 +79,12 @@ public partial class LedgeJump : PlayerState
     {
         StartPosition = Character.Position;
         TargetPosition = Character.Position + Controller.Direction * (Globals.Instance.TileSize * 2);
-        Debug.Log($"Added position {Controller.Direction * (Globals.Instance.TileSize * 2)}");
-        Debug.Log($"Target Position: {TargetPosition}");
-        Debug.Log($"Normal TargetPosition: {Character.Position + Controller.Direction * Globals.Instance.TileSize}");
     }
     
     public override void Move(double delta)
     {
         delta *= Globals.Instance.TileSize * GetMovementSpeed();
         Character.Position = Character.Position.MoveToward(TargetPosition, (float)delta);
-        Debug.Log($"Position: {Character.Position}");
     }
     
     private void DustFinished()

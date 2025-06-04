@@ -19,7 +19,7 @@ public partial class BikeWheelieBounceIdle : PlayerIdleState
         BunnyHopRayCast.Collision += SetBunnyColliding;
     }
     
-    public void SetBunnyColliding(bool colliding, GodotObject what)
+    public void SetBunnyColliding(bool colliding)
     {
         _bunnyColliding = colliding;
     }

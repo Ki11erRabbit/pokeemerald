@@ -1619,20 +1619,13 @@ Animation = NodePath("../../Animation")
 User = NodePath("../..")
 Machine = NodePath("..")
 
-[node name="CollisonRayCast" parent="." index="5" node_paths=PackedStringArray("CharacterController")]
-CharacterController = NodePath("../CharacterController")
-
-[node name="LedgeRayCast" parent="." index="6" node_paths=PackedStringArray("CharacterController")]
-CharacterController = NodePath("../CharacterController")
-
-[node name="BounceTileRayCast" type="RayCast2D" parent="." index="7" node_paths=PackedStringArray("CharacterController")]
+[node name="BounceTileRayCast" type="RayCast2D" parent="." index="7"]
 position = Vector2(8, 8)
 target_position = Vector2(0, 8)
 collision_mask = 4
 hit_from_inside = true
 collide_with_areas = true
 script = ExtResource("23_nr4l0")
-CharacterController = NodePath("../CharacterController")
 
 [node name="Animation" parent="." index="8" node_paths=PackedStringArray("CharacterController", "AnimatedSprite", "StateMachine")]
 CharacterController = NodePath("../CharacterController")

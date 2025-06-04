@@ -6,10 +6,9 @@ namespace PokeEmerald.Characters;
 public partial class CharacterCollisonRayCast : RayCast2D
 {
 	[Signal]
-	public delegate void CollisionEventHandler(bool collided, GodotObject what);
+	public delegate void CollisionEventHandler(bool collided);
 
 	[ExportCategory("Collision Vars")] 
-	[Export] public CharacterController CharacterController;
 
 	[Export] public GodotObject Collider;
 	private bool _disableCollision = false;
@@ -20,11 +19,11 @@ public partial class CharacterCollisonRayCast : RayCast2D
 		if (IsColliding())
 		{
 			Collider = GetCollider();
-			EmitSignal(SignalName.Collision, true, Collider);
+			EmitSignal(SignalName.Collision, true);
 		}
 		else
 		{
-			EmitSignal(SignalName.Collision, false, new Variant());
+			EmitSignal(SignalName.Collision, false);
 		}
 	}
 	
@@ -37,12 +36,12 @@ public partial class CharacterCollisonRayCast : RayCast2D
 	public void DisableCollision()
 	{
 		_disableCollision = true;
-		EmitSignal(SignalName.Collision, false, new Variant());
+		EmitSignal(SignalName.Collision, false);
 	}
 
 	public void EnableCollision()
 	{
 		_disableCollision = false;
-		EmitSignal(SignalName.Collision, false, new Variant());
+		EmitSignal(SignalName.Collision, false);
 	}
 }

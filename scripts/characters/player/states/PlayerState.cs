@@ -6,6 +6,22 @@ namespace PokeEmerald.Characters.Player.States;
 public abstract partial class PlayerState : CharacterState
 {
     
+    public override void _Process(double delta)
+    {
+        if (AtTargetPosition() || AtStartPosition())
+        {
+            SetDirection();
+            CheckCollision();
+            ProcessPress(delta);
+        }
+        ProcessBPress(delta);
+    }
+    
+    public virtual void ProcessBPress(double delta)
+    {
+        
+    }
+    
     protected override void SetDirection()
     {
         if (Input.IsActionPressed("ui_up"))
@@ -50,4 +66,11 @@ public abstract partial class PlayerState : CharacterState
             Controller.TargetPosition = new Vector2(16, 0);
         }
     }
+    
+    
+    protected virtual void ProcessPress(double delta)
+    {
+        
+    }
+
 }

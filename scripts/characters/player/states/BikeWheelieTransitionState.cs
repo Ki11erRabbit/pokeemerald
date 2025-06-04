@@ -30,7 +30,7 @@ public abstract partial class BikeWheelieTransitionState : PlayerState
         LedgeRayCast.Collision += SetLedgeColliding;
     }
 	
-    public virtual void SetLedgeColliding(bool colliding, GodotObject what)
+    public virtual void SetLedgeColliding(bool colliding)
     {
         _ledgeColliding = colliding;
     }

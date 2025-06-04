@@ -37,7 +37,7 @@ public partial class StateMachine : Node
                 continue;
             }
             state.SetProcess(child == CurrentState);
-            Debug.Log($"Setting processing for {child.Name} to {child == CurrentState}");
+            //Debug.Log($"Setting processing for {child.Name} to {child == CurrentState}");
         }
     }
 

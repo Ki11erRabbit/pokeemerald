@@ -1,7 +1,16 @@
-[gd_scene load_steps=32 format=3 uid="uid://ccxqqljt8b7x5"]
+[gd_scene load_steps=41 format=3 uid="uid://ccxqqljt8b7x5"]
 
 [ext_resource type="PackedScene" uid="uid://bus3gc6sk80pf" path="res://scenes/characters/Character.tscn" id="1_ceaqc"]
+[ext_resource type="Script" uid="uid://cw0dpqdsdu0du" path="res://scripts/characters/npc/Npc.cs" id="2_01k3j"]
 [ext_resource type="Texture2D" uid="uid://dkw5yusrwemvu" path="res://assets/npc/test.png" id="2_84hc2"]
+[ext_resource type="Script" uid="uid://wlnr7psuglwx" path="res://scripts/characters/CharacterCollisonRayCast.cs" id="3_bgitj"]
+[ext_resource type="Script" uid="uid://d3h4gimwg2ocx" path="res://scripts/utilities/state_machine/StateMachine.cs" id="4_urmqq"]
+[ext_resource type="Script" uid="uid://di7071c7wnyqc" path="res://scripts/characters/npc/ai/Idle.cs" id="5_brs55"]
+[ext_resource type="Script" uid="uid://vjkc8ekmtbpp" path="res://scripts/characters/npc/states/Idle.cs" id="5_l1bgn"]
+[ext_resource type="Script" uid="uid://cs784jcy3nfkv" path="res://scripts/characters/npc/NpcController.cs" id="5_urpkq"]
+[ext_resource type="Script" uid="uid://bn51yl5owdkte" path="res://scripts/characters/npc/ai/WalkToPlayer.cs" id="6_cr2nu"]
+[ext_resource type="Script" uid="uid://d03fabo0imd4x" path="res://scripts/characters/npc/states/Walk.cs" id="6_thqvo"]
+[ext_resource type="Script" uid="uid://b3vdl8efyfkyh" path="res://scripts/characters/npc/ai/AtPlayer.cs" id="7_cr2nu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bgitj"]
 atlas = ExtResource("2_84hc2")
@@ -267,10 +276,87 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="NPC" instance=ExtResource("1_ceaqc")]
+[node name="NPC" node_paths=PackedStringArray("SightRayCast", "AiStateMachine", "CharacterController", "StateMachine") instance=ExtResource("1_ceaqc")]
 texture_filter = 1
+script = ExtResource("2_01k3j")
+StartingAiState = "Idle"
+SightRayCast = NodePath("SightRayCast")
+AiStateMachine = NodePath("AiStateMachine")
+SightRange = 0
+StartingDirection = 1
+CharacterController = NodePath("CharacterController")
+StateMachine = NodePath("MovementStateMachine")
+StartingState = "Idle"
+
+[node name="Movement" parent="." index="1" node_paths=PackedStringArray("CharacterController", "StateMachine")]
+CharacterController = NodePath("../CharacterController")
+StateMachine = NodePath("../MovementStateMachine")
+
+[node name="Animation" parent="." index="4" node_paths=PackedStringArray("CharacterController", "AnimatedSprite", "StateMachine")]
+CharacterController = NodePath("../CharacterController")
+AnimatedSprite = NodePath("AnimatedSprite2D")
+StateMachine = NodePath("../MovementStateMachine")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Animation" index="0"]
 position = Vector2(8, 4)
 sprite_frames = SubResource("SpriteFrames_01k3j")
 animation = &"idle_down"
+
+[node name="AiStateMachine" type="Node" parent="." index="5" node_paths=PackedStringArray("User")]
+script = ExtResource("4_urmqq")
+User = NodePath("..")
+
+[node name="Idle" type="Node" parent="AiStateMachine" index="0" node_paths=PackedStringArray("SightRayCast", "Controller", "User", "Machine")]
+script = ExtResource("5_brs55")
+SightRayCast = NodePath("../../SightRayCast")
+Controller = NodePath("../../CharacterController")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="WalkToPlayer" type="Node" parent="AiStateMachine" index="1" node_paths=PackedStringArray("PlayerDetector", "Controller", "User", "Machine")]
+script = ExtResource("6_cr2nu")
+PlayerDetector = NodePath("../../PlayerDetector")
+Controller = NodePath("../../CharacterController")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="AtPlayer" type="Node" parent="AiStateMachine" index="2" node_paths=PackedStringArray("Controller", "User", "Machine")]
+script = ExtResource("7_cr2nu")
+Controller = NodePath("../../CharacterController")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="MovementStateMachine" type="Node" parent="." index="6" node_paths=PackedStringArray("User")]
+script = ExtResource("4_urmqq")
+User = NodePath("..")
+
+[node name="Idle" type="Node" parent="MovementStateMachine" index="0" node_paths=PackedStringArray("AiStateMachine", "Controller", "RayCast", "Animation", "User", "Machine")]
+script = ExtResource("5_l1bgn")
+AiStateMachine = NodePath("../../AiStateMachine")
+Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="Walk" type="Node" parent="MovementStateMachine" index="1" node_paths=PackedStringArray("AiStateMachine", "Controller", "RayCast", "Animation", "User", "Machine")]
+script = ExtResource("6_thqvo")
+AiStateMachine = NodePath("../../AiStateMachine")
+Controller = NodePath("../../CharacterController")
+RayCast = NodePath("../../CollisonRayCast")
+Animation = NodePath("../../Animation")
+User = NodePath("../..")
+Machine = NodePath("..")
+
+[node name="PlayerDetector" type="RayCast2D" parent="." index="7"]
+position = Vector2(8, 8)
+target_position = Vector2(0, 10)
+script = ExtResource("3_bgitj")
+
+[node name="SightRayCast" type="RayCast2D" parent="." index="8"]
+position = Vector2(8, 8)
+target_position = Vector2(0, 19)
+script = ExtResource("3_bgitj")
+
+[node name="CharacterController" type="Node" parent="." index="9"]
+script = ExtResource("5_urpkq")

@@ -91,16 +91,9 @@ public abstract partial class CharacterState : State
         {
             SetDirection();
             CheckCollision();
-            ProcessPress(delta);
         }
-        ProcessBPress(delta);
     }
-
     
-    public virtual void ProcessBPress(double delta)
-    {
-        
-    }
 
     public override void EnterState()
     {
@@ -116,7 +109,7 @@ public abstract partial class CharacterState : State
     }
 
     
-    public virtual void SetColliding(bool colliding, GodotObject what)
+    public virtual void SetColliding(bool colliding)
     {
         Colliding = colliding;
     }
@@ -205,11 +198,6 @@ public abstract partial class CharacterState : State
     }
 
     protected abstract void SetDirection();
-
-    protected virtual void ProcessPress(double delta)
-    {
-        
-    }
 
     protected virtual void CheckCollision()
     {

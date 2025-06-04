@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=4 uid="uid://dyty120jj2n30"]
+[gd_scene load_steps=6 format=4 uid="uid://dyty120jj2n30"]
 
 [ext_resource type="TileSet" uid="uid://dmkpv46qr866u" path="res://resources/levels/exterior.tres" id="1_86d4f"]
 [ext_resource type="TileSet" uid="uid://qv8gxscjx2xw" path="res://resources/tilesets/Ledges.tres" id="2_3wv3p"]
 [ext_resource type="PackedScene" uid="uid://didjjlyomyes2" path="res://scenes/characters/player/Player.tscn" id="2_w20ko"]
 [ext_resource type="TileSet" uid="uid://bcm15weoks8wt" path="res://resources/tilesets/BunnyTiles.tres" id="3_timdk"]
+[ext_resource type="PackedScene" uid="uid://ccxqqljt8b7x5" path="res://scenes/characters/npc.tscn" id="5_j0sv7"]
 
 [node name="TestLevel" type="Node2D"]
 
@@ -25,3 +26,7 @@ tile_map_data = PackedByteArray("AAAPAAIAAAAAAAAAAAAPAAEAAAABAAAAAAA=")
 tile_set = ExtResource("3_timdk")
 
 [node name="Player" parent="." instance=ExtResource("2_w20ko")]
+
+[node name="NPC" parent="." instance=ExtResource("5_j0sv7")]
+position = Vector2(336, 0)
+SightRange = 2
