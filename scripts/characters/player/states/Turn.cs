@@ -4,7 +4,7 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Turn : CharacterState
+public partial class Turn : PlayerState
 {
     private CharacterState _previousState;
     public override void _Process(double delta)

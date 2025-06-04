@@ -3,7 +3,7 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class BikeRide : CharacterState
+public partial class BikeRide : PlayerState
 {
 	[Export] public double SpeedUpThreshold = 0.3;
 	private double _speedUpTime = 0.0;

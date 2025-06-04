@@ -4,7 +4,7 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Run : CharacterState
+public partial class Run : PlayerState
 {
 	[Export] public CharacterCollisonRayCast LedgeRayCast;
 	private bool _ledgeColliding = false;

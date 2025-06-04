@@ -137,9 +137,7 @@ public abstract partial class CharacterState : State
     
     public void Animate(AnimatedSprite2D animatedSprite)
     {
-        Debug.Log("Configuring Animation State");
         if (ConfigureAnimationState(animatedSprite)) return;
-        Debug.Log("Playing animation: " + AnimationState.ToString());
         animatedSprite.Play(AnimationState.ToString());
     }
 
@@ -205,51 +203,8 @@ public abstract partial class CharacterState : State
     {
         return Character.Position.IsEqualApprox(StartPosition);
     }
-    
-    protected virtual void SetDirection()
-    {
-        if (Input.IsActionPressed("ui_up"))
-        {
-            Controller.Direction = Vector2.Up;
-            Controller.TargetPosition = new Vector2(0, -16);
-        }
-        else if (Input.IsActionPressed("ui_down"))
-        {
-            Controller.Direction = Vector2.Down;
-            Controller.TargetPosition = new Vector2(0, 16);
-        } 
-        if (Input.IsActionPressed("ui_left"))
-        {
-            Controller.Direction = Vector2.Left;
-            Controller.TargetPosition = new Vector2(-16, 0);
-        }
-        else if (Input.IsActionPressed("ui_right"))
-        {
-            Controller.Direction = Vector2.Right;
-            Controller.TargetPosition = new Vector2(16, 0);
-        }
-        
-        if (Input.IsActionJustPressed("ui_up"))
-        {
-            Controller.Direction = Vector2.Up;
-            Controller.TargetPosition = new Vector2(0, -16);
-        }
-        else if (Input.IsActionJustPressed("ui_down"))
-        {
-            Controller.Direction = Vector2.Down;
-            Controller.TargetPosition = new Vector2(0, 16);
-        } 
-        if (Input.IsActionJustPressed("ui_left"))
-        {
-            Controller.Direction = Vector2.Left;
-            Controller.TargetPosition = new Vector2(-16, 0);
-        }
-        else if (Input.IsActionJustPressed("ui_right"))
-        {
-            Controller.Direction = Vector2.Right;
-            Controller.TargetPosition = new Vector2(16, 0);
-        }
-    }
+
+    protected abstract void SetDirection();
 
     protected virtual void ProcessPress(double delta)
     {
@@ -265,23 +220,5 @@ public abstract partial class CharacterState : State
     public void SnapToGrid()
     {
         TargetPosition = Globals.Instance.SnapToGrid(Character.Position);
-    }
-    
-    protected virtual void CheckForPositionAndCollison(IReachedTargetPosition method)
-    {
-        if (AtTargetPosition() && !Colliding)
-        {
-            method.Colliding(this);
-        }
-        else if (AtTargetPosition() && Colliding)
-        {
-            method.NotColliding(this);
-        }
-    }
-    
-    protected interface IReachedTargetPosition
-    {
-        public void Colliding(CharacterState self);
-        public void NotColliding(CharacterState self);
     }
 }

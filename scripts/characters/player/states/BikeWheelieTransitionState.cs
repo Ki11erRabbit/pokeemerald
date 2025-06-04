@@ -3,7 +3,7 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public abstract partial class BikeWheelieTransitionState : CharacterState
+public abstract partial class BikeWheelieTransitionState : PlayerState
 {
     [Export] public AnimatedSprite2D AnimatedSprite;
     [Export] public double FrameThreshold = 0.3;

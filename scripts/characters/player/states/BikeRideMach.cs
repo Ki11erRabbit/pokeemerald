@@ -3,7 +3,7 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class BikeRideMach : CharacterState
+public partial class BikeRideMach : PlayerState
 {
 	[Export] public CharacterCollisonRayCast LedgeRayCast;
 	private bool _ledgeColliding = false;

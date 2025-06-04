@@ -1649,9 +1649,7 @@ texture = ExtResource("24_jb2jc")
 texture_filter = 1
 position = Vector2(8, 4)
 sprite_frames = SubResource("SpriteFrames_db84v")
-animation = &"bike_acro_side_hop_up_right"
-frame = 1
-frame_progress = 1.0
+animation = &"idle_down"
 
 [node name="Particles" type="AnimatedSprite2D" parent="Animation" index="2"]
 visible = false

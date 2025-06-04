@@ -3,7 +3,7 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class BikeWheelieBounceTurn : CharacterState
+public partial class BikeWheelieBounceTurn : PlayerState
 {
     [ExportCategory("Nodes")]
     [Export] public AnimationPlayer AnimationPlayer;

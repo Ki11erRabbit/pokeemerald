@@ -5,7 +5,7 @@ using PokeEmerald.Utils.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class Walk : CharacterState
+public partial class Walk : PlayerState
 {
 	private bool _tapped = false;
 	[Export] public CharacterCollisonRayCast LedgeRayCast;

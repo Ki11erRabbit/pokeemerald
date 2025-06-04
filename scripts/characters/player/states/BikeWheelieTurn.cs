@@ -4,7 +4,7 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class BikeWheelieTurn : CharacterState
+public partial class BikeWheelieTurn : PlayerState
 {
     private CharacterState _previousState;
     public override void _Process(double delta)

@@ -3,7 +3,7 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public abstract partial class PlayerIdleState : CharacterState
+public abstract partial class PlayerIdleState : PlayerState
 {
     [ExportCategory("Vars")] 
     [Export] public double HoldThreshold = 0.1f;

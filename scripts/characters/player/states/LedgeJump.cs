@@ -3,7 +3,7 @@ using PokeEmerald.Characters.StateMachine;
 
 namespace PokeEmerald.Characters.Player.States;
 
-public partial class LedgeJump : CharacterState
+public partial class LedgeJump : PlayerState
 {
     [Export] public AnimatedSprite2D Sprite;
     [Export] public Sprite2D Shadow;
